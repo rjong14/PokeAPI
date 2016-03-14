@@ -3,10 +3,13 @@ html
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Lumino - Forms
+    title PokeApi
     link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', rel='stylesheet')
+    link(href='css/font-awesome.min.css', rel='stylesheet')
     link(href='css/datepicker3.css', rel='stylesheet')
-    link(href='css/styles.css', rel='stylesheet')
+    link(href='css/style.css', rel='stylesheet')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js')
+
   body
     nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
       .container-fluid
@@ -39,21 +42,21 @@ html
                     span.glyphicon.glyphicon-log-out
                     |  Logout
     #sidebar-collapse.col-sm-3.col-lg-2.sidebar
-      form(role='search')
-        .form-group
-          input.form-control(type='text', placeholder='Search')
+      h1
+        | Pokéapi
       ul.nav.menu
+        li.divider(role='presentation')
         li
-          a(href='index.html')
+          a(href='/')
             span.glyphicon.glyphicon-dashboard
             |  Dashboard
         li
-          a(href='widgets.html')
-            span.glyphicon.glyphicon-th
+          a(href='/users')
+            span.glyphicon.glyphicon-user
             |  Users
         li
-          a(href='charts.html')
-            span.glyphicon.glyphicon-stats
+          a(href='/locations')
+            span.fa.fa-map
             |  Locations
         li.divider(role='presentation')
         li
@@ -64,6 +67,10 @@ html
     .col-sm-9.col-sm-offset-3.col-lg-10.col-lg-offset-2.main
       .row.content
         block content
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js')
     script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+    script(src='js/try.js')
+    script.
+      update();
+
+
 

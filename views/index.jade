@@ -1,5 +1,87 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .col-lg-12
+    h1= title
+    p Welcome to #{title}
+    .panel.panel-default
+      .panel-heading
+        | Try it now!
+      .panel-body
+        .input-group
+          span.input-group-addon http://localhost:3000/api/
+          input#interactive.form-control(type='text', placeholder='')
+          span.input-group-btn
+            button.btn.btn-primary(onclick='interactive_call();return false;') request
+        small
+          | Need a hint? try
+          a(href='#', onclick="update('users/');return false;")
+            i users/
+          |  or
+          a(href='#', onclick="update('locations/');return false;")
+            i locations/
+          |  or
+          a(href='#', onclick="update('somethingcool');return false;")
+            i somethingcool
+        p.lead.pad_top Result:
+        .well
+          pre#interactive_output.pre-scrollable.
+
+        .col-sm-2.col-lg-2.col-md-2
+    .panel.panel-default
+      .panel-heading
+        | api
+      .panel-body
+        h4 Users
+        p
+          | users bla bla bla
+        h5 GET api/users/
+        pre
+          code.
+            {
+              "username": "Ash",
+              "password": "P@ssword",
+              "Pokemons": [
+                {
+                    "lvl": "100",
+                    "description": "pokemon",
+                    "PokeID": "151",
+                }
+              ],
+
+            }
+        h5 GET api/users/{ID}
+        pre
+          code.
+            {
+              "username": "Ash",
+              "password": "P@ssword",
+              "Pokemons": [
+                {
+                    "lvl": "100",
+                    "description": "pokemon",
+                    "PokeID": "151",
+                }
+              ],
+
+            }
+        h4
+          | Locations
+        p
+          | Locations bla bla
+        h5 GET api/locations/
+        pre
+          code.
+            {
+              "username": "Ash",
+              "password": "P@ssword",
+              "Pokemons": [
+                {
+                    "lvl": "100",
+                    "description": "pokemon",
+                    "PokeID": "151",
+                }
+              ],
+
+            }
+
