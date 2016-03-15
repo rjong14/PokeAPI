@@ -43,11 +43,13 @@ app.use(flash());
 
 
 //models
+var Role = require('./models/role');
 var User = require('./models/user');
 
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter);
 var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
+var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var userRoutes = require('./routes/user')(backEndRouter, User);
 
 //load in routes
@@ -55,6 +57,7 @@ app.use('/api', backEndRouter);
 app.use('/', frontEndRouter);
 app.use(frontendRoute);
 app.use(authenticationRoute);
+app.use(roleRoutes);
 app.use(userRoutes);
 
 //Middleware
