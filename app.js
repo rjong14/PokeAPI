@@ -15,12 +15,12 @@ app.set('view engine', 'jade');
 
 
 // required for passport
-app.use(session({
-    secret: 'ilovescotchscotchyscotchscotch'
-})); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-app.use(flash()); // use connect-flash for flash messages stored in session
+//app.use(session({
+//    secret: 'ilovescotchscotchyscotchscotch'
+//})); // session secret
+//app.use(passport.initialize());
+//app.use(passport.session()); // persistent login sessions
+//app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 // uncomment after placing your favicon in /public
