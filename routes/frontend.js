@@ -1,27 +1,22 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET home page. */
-router
-    .get('/', function (req, res, next) {
+module.exports = function(frontEndRouter){
+    frontEndRouter.route('/')
+    .get(function(req, res){
         res.render('index', {
             title: 'Home'
         });
-    })
-    .get('/login', function (req, res, next) {
-        res.render('login', {
-            title: 'Login'
-        });
-    })
-    .get('/users', function (req, res, next) {
+    });
+    frontEndRouter.route('/users')
+    .get(function(req, res){
         res.render('users', {
             title: 'Users'
         });
-    })
-    .get('/locations', function (req, res, next) {
+    });
+    frontEndRouter.route('/locations')
+    .get(function(req, res){
         res.render('locations', {
             title: 'Locations'
         });
-    })
-
-module.exports = router;
+    });
+    
+    return frontEndRouter;
+};
