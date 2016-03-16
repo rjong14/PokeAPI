@@ -50,7 +50,7 @@ var User = require('./models/user');
 var frontendRoute = require('./routes/frontend')(frontEndRouter);
 var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
-var userRoutes = require('./routes/user')(backEndRouter, User);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role);
 
 //load in routes
 app.use('/api', backEndRouter);
