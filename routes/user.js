@@ -38,7 +38,7 @@ module.exports = function(backEndRouter, User, Role){
             res[200](user);
         });
     })
-    .put(function(req,res){
+    .put(function(req,res){   //help, if role save gets called first
         User.findById(req.params.id, function(err, user){
             if(err){
                 res[500](err);
@@ -48,10 +48,7 @@ module.exports = function(backEndRouter, User, Role){
             if (req.body.password){ user.local.password = req.body.password;};
             if (req.body.role){
                 Role.findOne({ name: req.body.role}, function (err, role){
-                    if(!role){
-                        res[400]('no valid role given');
-                        return;
-                    };
+                    if(!role){ res[400]('no valid role given'); return; };
                     user.role = role._id;
             })};
             user.save(function(err){
@@ -61,12 +58,8 @@ module.exports = function(backEndRouter, User, Role){
         })
     })
     .delete(function(req, res){
-        User.remove({
-            _id: req.params.id
-        }, function(err, user){
-            if(err){
-                res[500](err);
-            }
+        User.remove({ _id: req.params.id}, function(err, user){
+            if(err){ res[500](err); return; }
             res[200](user);
         });
     });
