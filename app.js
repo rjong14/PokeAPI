@@ -36,15 +36,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // passport stuff
-app.use(session({secret: 'secret', resave: false, saveUninitialized: false}));
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
 
 //models
-var Role = require('./models/role');
-var User = require('./models/user');
+var Role = require('./models/Role');
+var User = require('./models/User');
 
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter);
@@ -82,8 +86,8 @@ if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
-            message: err.message
-            , error: err
+            message: err.message,
+            error: err
         });
     });
 }
@@ -93,8 +97,8 @@ if (app.get('env') === 'development') {
 app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
-        message: err.message
-        , error: {}
+        message: err.message,
+        error: {}
     });
 });
 
