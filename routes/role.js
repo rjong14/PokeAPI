@@ -1,5 +1,5 @@
 module.exports = function(backEndRouter, Role){
-    backEndRouter.route('/role')
+    backEndRouter.route('/roles')
     .get(function(req, res){
         Role.find(function(err, role){
             if (err){
@@ -25,7 +25,7 @@ module.exports = function(backEndRouter, Role){
         })
     });
     
-    backEndRouter.route('/role/:id')
+    backEndRouter.route('/roles/:id')
     .put(function(req, res){
         Role.findById(req.params.id), function(err, role){
             if (err){

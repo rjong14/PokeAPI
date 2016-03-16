@@ -1,5 +1,5 @@
 module.exports = function(backEndRouter, User, Role){
-    backEndRouter.route('/user')
+    backEndRouter.route('/users')
     .get(function(req, res){
         User.find()
             .exec(function(err, user){
@@ -17,7 +17,7 @@ module.exports = function(backEndRouter, User, Role){
             
             var user = new User();
             user.local.email = req.body.email;
-            user.local.password = req.body.password;
+            user.local.password = user.generateHash(req.body.password);
             user.role = role._id;
             user.save(function(err){
                 if (err){
@@ -29,7 +29,7 @@ module.exports = function(backEndRouter, User, Role){
         });
     });
     
-    backEndRouter.route('/user/:id')
+    backEndRouter.route('/users/:id')
     .get(function(req, res){
         User.findById(req.params.id)
             .populate('role')
@@ -45,7 +45,7 @@ module.exports = function(backEndRouter, User, Role){
                 return;
             }
             if (req.body.email){ user.local.email = req.body.email;};
-            if (req.body.password){ user.local.password = req.body.password;};
+            if (req.body.password){ user.local.password = user.generateHash(req.body.password);};
             if (req.body.role){
                 Role.findOne({ name: req.body.role}, function (err, role){
                     if(!role){ res[400]('no valid role given'); return; };
@@ -64,7 +64,18 @@ module.exports = function(backEndRouter, User, Role){
         });
     });
     
-    //backEndRouter.route('/user/:id/role')
+    //backEndRouter.route('/users/role/:name')
+    //.get(function(req, res){
+    //    Role.findOne({'name': req.params.name}, function(err, role){
+    //        if(err){ res[500](err); return; }
+    //        if (!role) { res[400]('no valid role given'); return; };
+    //        User.find({'name': role._id}, function(err, users){ //help, find doesnt work
+    //            if(err){ res[500](err); return; }
+    //            if(!users) { res[400]('no users found'); return; };
+    //            res[200](users);
+    //        })
+    //    })
+    //})
     
     return backEndRouter;
 };
