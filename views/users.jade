@@ -4,6 +4,46 @@ block content
   .col-lg-12
     h1= title
     p Welcome to #{title}
+    p #{users}
+  .col-md-4
+      .panel.panel-default
+        .panel-heading
+          | All Users
+        .panel-body.chat
+          ul
+            each us in users
+              li.user-list-item.clearfix.draggable( id='#{us._id}', item='#{us._id}', data-user='#{us._id}')
+                  span.chat-img.pull-left
+                    img.img-circle(src='http://placehold.it/50/30a5ff/fff', alt='User Avatar')
+                  .header
+                    strong.primary-font
+                      | #{us.local.email} -
+                      small #{us.role}
+                    br
+                    small
+                      | something
+  .col-md-8
     .panel.panel-default
-      .panel-heading
-        | Users
+        .panel-heading
+          span.glyphicon.glyphicon-user
+          | user
+        |
+        .panel-body.usercrud
+          form.input-group()
+            .input-group
+              label Email
+              |
+              input.form-control(value='#{user.local.email}')
+              |
+              br
+              |
+              label Role
+              |
+              select.form-control(value='moot')
+              br
+              |
+              label Lol
+              |
+              textarea.form-control()
+            |
+            button.btn.btn-send(type='submit', ng-click='apply()') Save

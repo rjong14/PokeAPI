@@ -6,6 +6,11 @@ Version: 1.0
 */
 
 
+.user-list-item {
+    cursor: pointer;
+}
+
+
 /*Global Styles*/
 
 body {

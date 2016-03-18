@@ -51,7 +51,7 @@ var Role = require('./models/Role');
 var User = require('./models/User');
 
 //declare routes
-var frontendRoute = require('./routes/frontend')(frontEndRouter);
+var frontendRoute = require('./routes/frontend')(frontEndRouter, User);
 var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role);
