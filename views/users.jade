@@ -4,9 +4,9 @@ block content
   .col-lg-12
     h1= title
     p Welcome to #{title}
-    p #{users}
+    p #{roles}
   .col-md-4
-      .panel.panel-default
+      .panel.panel-default.panel-crud
         .panel-heading
           | All Users
         .panel-body.chat
@@ -17,33 +17,29 @@ block content
                     img.img-circle(src='http://placehold.it/50/30a5ff/fff', alt='User Avatar')
                   .header
                     strong.primary-font
-                      | #{us.local.email} -
-                      small #{us.role}
-                    br
-                    small
-                      | something
+                      | #{us.local.email}
+
   .col-md-8
-    .panel.panel-default
+    .panel.panel-default.panel-crud
         .panel-heading
           span.glyphicon.glyphicon-user
           | user
-        |
         .panel-body.usercrud
-          form.input-group()
+          form.post-user.input-group()
             .input-group
               label Email
-              |
-              input.form-control(value='#{user.local.email}')
-              |
+              input.form-control(name='email', value='lolmail')
               br
-              |
+              label Password
+              input.form-control(name='password', value='')
+              br
               label Role
-              |
-              select.form-control(value='moot')
-              br
-              |
-              label Lol
-              |
-              textarea.form-control()
-            |
-            button.btn.btn-send(type='submit', ng-click='apply()') Save
+              input.form-control(name='role', value='moot')
+            button.btn.btn-send(type='submit') Submit
+
+
+  .hiddenhtml
+    select.form-control(name='role')
+      each ro in roles
+        option(value="#{ro.name}") #{ro.name}
+

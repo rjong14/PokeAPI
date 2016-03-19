@@ -10,6 +10,14 @@ Version: 1.0
     cursor: pointer;
 }
 
+.panel-crud{
+    height: 700px;
+}
+
+.hiddenhtml{
+    display: none;
+}
+
 
 /*Global Styles*/
 
