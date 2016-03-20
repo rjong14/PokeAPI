@@ -49,14 +49,22 @@
                 });
         });
 
+        $('.btn-delete').on('click', function(){
+            var id = $(this).attr('data-user')
+                $.ajax({
+                    method: "DELETE",
+                    url: "/api/users/"+id,
+                })
+                .done(function (msg) {
+                    alert("Data Saved: " + msg);
+                    location.reload();
+                });
+        })
+
         $('.user-list-item').on('click', function () {
             var elem = $(this);
             var id = elem.attr('data-user');
             getUser(id);
-
-
-
-
         })
 
     })

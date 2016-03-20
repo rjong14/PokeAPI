@@ -1,0 +1,45 @@
+@font-face {
+    font-family: "Roboto";
+    src: local(Roboto Regular), url("../fonts/roboto/Roboto-Regular.woff2") format("woff2"), url("../fonts/roboto/Roboto-Regular.woff") format("woff"), url("../fonts/roboto/Roboto-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+
+.html, body{
+    line-height: 1.5;
+    font-family: "Roboto" !important;
+    font-weight: normal;
+}
+
+.user-list-item {
+    cursor: pointer;
+}
+
+.panel-crud{
+    height: 700px;
+}
+
+.panel-crud .panel-body{
+    height: 580px;
+}
+
+.hiddenhtml{
+    display: none;
+}
+
+.deletehide button {
+    display: none;
+}
+
+.deletehide:hover button {
+    display: block;
+}
+
+.panel-poke{
+
+}
+
+.panel-poke .panel-heading{
+    background-color: #EF5350;
+    color: #FFF;
+}

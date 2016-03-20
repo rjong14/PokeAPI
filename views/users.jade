@@ -4,23 +4,26 @@ block content
   .col-lg-12
     h1= title
     p Welcome to #{title}
-    p #{roles}
   .col-md-4
-      .panel.panel-default.panel-crud
+      .panel.panel-poke.panel-crud
         .panel-heading
           | All Users
         .panel-body.chat
           ul
             each us in users
-              li.user-list-item.clearfix.draggable( id='#{us._id}', item='#{us._id}', data-user='#{us._id}')
+              li.user-list-item.clearfix.draggable.deletehide( id='#{us._id}', item='#{us._id}', data-user='#{us._id}')
                   span.chat-img.pull-left
-                    img.img-circle(src='http://placehold.it/50/30a5ff/fff', alt='User Avatar')
+                    //img.img-circle(src='http://placehold.it/50/30a5ff/fff', alt='User Avatar')
+                    img.img-circle(src='https://avatars3.githubusercontent.com/u/4416224?v=3&s=50', alt='User Avatar')
                   .header
                     strong.primary-font
                       | #{us.local.email}
-
+                  button.btn.btn-danger.pull-right.btn-delete(data-user='#{us._id}') Delete
+        .panel-footer
+          button.btn.btn-send
+            span.glyphicon.glyphicon-plus new
   .col-md-8
-    .panel.panel-default.panel-crud
+    .panel.panel-poke.panel-crud
         .panel-heading
           span.glyphicon.glyphicon-user
           | user
@@ -36,8 +39,6 @@ block content
               label Role
               input.form-control(name='role', value='moot')
             button.btn.btn-send(type='submit') Submit
-
-
   .hiddenhtml
     select.form-control(name='role')
       each ro in roles
