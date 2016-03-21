@@ -38,7 +38,8 @@ module.exports = function(backEndRouter, User, Role){
             res[200](user);
         });
     })
-    .put(function(req,res){   //help, if role save gets called first
+    .put(function(req,res){
+        var us = null;
         User.findById(req.params.id, function(err, user){
             if(err){
                 res[500](err);
@@ -50,10 +51,14 @@ module.exports = function(backEndRouter, User, Role){
                 Role.findOne({ name: req.body.role}, function (err, role){
                     if(!role){ res[400]('no valid role given'); return; };
                     user.role = role._id;
+                    us = user;
             })};
-            user.save(function(err){
+
+        }).exec(function(err, data){
+                us.save(function(err){
+                    console.log('2nd exec');
                 if(err){res[500](err); return;}
-                res[200](user);
+                res[200](data);
             });
         })
     })
