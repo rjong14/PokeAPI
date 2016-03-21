@@ -10,6 +10,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var session = require('express-session')
 var configDB = require('./config/database.js');
+var async = require('async');
 require('json-response');
 
 //make app and router
@@ -51,7 +52,7 @@ var Role = require('./models/Role');
 var User = require('./models/User');
 
 //declare routes
-var frontendRoute = require('./routes/frontend')(frontEndRouter);
+var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, async);
 var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role);
