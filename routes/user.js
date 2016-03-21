@@ -38,7 +38,7 @@ module.exports = function(backEndRouter, User, Role){
             res[200](user);
         });
     })
-    .put(function(req,res){   //help, if role save gets called first
+    .put(function(req,res){   //help, if role, save gets called first
         User.findById(req.params.id, function(err, user){
             if(err){
                 res[500](err);
