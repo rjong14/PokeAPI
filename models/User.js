@@ -8,8 +8,8 @@ var Schema       = mongoose.Schema;
 var userSchema = mongoose.Schema({
 
     local            : {
-        email        : String,
-        password     : String
+        email        : { type: String, required: true },
+        password     : { type: String, required: true }
     },
     facebook         : {
         id           : String,
@@ -29,11 +29,11 @@ var userSchema = mongoose.Schema({
         email        : String,
         name         : String
     },
-    pokemon          : {
-        id           : Number,
+    pokemon          : [{
+        pokeid       : String,
         caught_at    : Date        
-    },
-    role : {type: Schema.Types.ObjectId, ref: 'Role'}
+    }],
+    role : {type: Schema.Types.ObjectId, ref: 'Role', required: false}
 });
 
 // methods ======================

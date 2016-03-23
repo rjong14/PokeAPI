@@ -69,6 +69,39 @@ module.exports = function(backEndRouter, User, Role){
         });
     });
     
+    backEndRouter.route('/users/:id/pokemon')
+    .get(function(req, res){
+       User.findById(req.params.id, function(err, user){
+           if(err){res[500](err);return;}
+           res[200](user.pokemon);
+       });
+    })
+    .post(function(req, res){
+        User.findById(req.params.id, function(err, user){
+            if(err){res[500](err);return;}
+            
+            if (!req.body.pokeid){res[400]('no pokeid given'); return;};
+            console.log(req.body.pokeId);
+            user.pokemon.push({pokeid : req.body.pokeid, caught_at: new Date()})
+            user.save(function(err){
+                if(err){res[500](err);return;}
+                res[200](user);
+            })
+        });
+    });
+    
+    backEndRouter.route('/users/:id/pokemon/:pokeid')
+    .delete(function(req, res){
+        User.findById(req.params.id, function(err, user){
+            if(err){res[500](err);return;}
+            user.pokemon.pull({_id: req.params.pokeid});
+            user.save(function(err){
+                if(err){res[500](err);return;}
+                res[200](user);
+            })
+        })
+    })
+    
     //backEndRouter.route('/users/role/:name')
     //.get(function(req, res){
     //    Role.findOne({'name': req.params.name}, function(err, role){
