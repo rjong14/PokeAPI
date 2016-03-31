@@ -10,6 +10,7 @@ console.log("            |___/ ");
 var update = function (call) {
     jQuery('#interactive').val(call);
     interactive_call();
+    hljs.initHighlightingOnLoad();
 }
 
 var interactive_call = function () {

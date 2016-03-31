@@ -25,7 +25,8 @@ block content
             i somethingcool
         p.lead.pad_top Result:
         .well
-          pre#interactive_output.pre-scrollable.
+          pre.pre-scrollable
+            code#interactive_output.json.
 
         .col-sm-2.col-lg-2.col-md-2
     .panel.panel-poke
@@ -37,7 +38,7 @@ block content
           | users bla bla bla
         h5 GET api/users/
         pre
-          code.
+          code.json.
             {
                 "status": 200,
                 "data": [
@@ -102,3 +103,5 @@ block content
 
             }
 
+    script.
+      hljs.initHighlightingOnLoad();
