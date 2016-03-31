@@ -1,3 +1,5 @@
+var http = require('http');
+
 module.exports = function(backEndRouter, User, Role){
     backEndRouter.route('/users')
     .get(function(req, res){
@@ -73,7 +75,21 @@ module.exports = function(backEndRouter, User, Role){
     .get(function(req, res){
        User.findById(req.params.id, function(err, user){
            if(err){res[500](err);return;}
-           res[200](user.pokemon);
+           //res[200](user.pokemon);
+           
+           var options = {
+               host: 'pokeapi.co',
+               port: 80,
+               path: '/api/v2/pokemon/1/'
+           };
+           
+           http.get(options, function(api) {
+               console.log(api.?);
+           }).on('error', function(e) {
+               console.log("Got error: " + e.message);
+           });
+           
+           
        });
     })
     .post(function(req, res){
