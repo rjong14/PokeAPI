@@ -1,11 +1,31 @@
+var myUser = {
+	    User: "",
+
+        find: function (id, callback) {
+            var call_url = '/api/users/' + id;
+            var User='';
+            $.getJSON(call_url, function (data) {
+                User = data;
+               if(callback)
+                   callback(data);
+
+            })
+            return this;
+        }
+
+}
+
+    var detailhtml = "";
+    var headerhtml = '';
+
     var getUser = function (user) {
         var call_url = '/api/users/' + user;
 
-        var detailhtml = "";
-
-        $.getJSON(call_url, function (data) {
+        myUser.find(user, function(data){
                 var roleselect = $('.hiddenhtml').html();
-                detailhtml += '<form class="input-group put-user" data-user="'+data.data._id+'">'
+                headerhtml = '<span class="fa fa-pencil"></span>'
+                    + 'Edit ' + data.data.local.email;
+                detailhtml = '<form class="input-group put-user" data-user="'+data.data._id+'">'
                     + '<div class="input-group">'
                     + '<label>Email</label>'
                     + '<input name="email" class="form-control" value="'+ data.data.local.email +'"/></br>'
@@ -13,11 +33,32 @@
                     + roleselect
                     + '</div></br>'
                     + '<button type="submit" class="btn btn-send btn-put">Send</button></form>';
-            })
-            .done(function () {
                 $(".usercrud").empty();
+                $('.headinguser').html(headerhtml);
                 $(".usercrud").html(detailhtml);
-            });
+
+        })
+    }
+
+    var newUser = function () {
+        headerhtml = '<span class="fa fa-user-plus"></span>'
+                    + 'New User';
+        $('.headinguser').html(headerhtml);
+
+        var roleselect = $('.hiddenhtml').html();
+        detailhtml = '<form class="post-user input-group">'
+              + '<div class="input-group">'
+                + '<label>Email</label>'
+                + '<input name="email" value="" class="form-control"/><br/>'
+                + '<label>Password</label>'
+                + '<input name="password" value="" class="form-control"/><br/>'
+                + '<label>Role</label>'
+                + roleselect
+              + '</div>'
+               +' <button type="submit" class="btn btn-send">Submit</button>'
+            + '</form>';
+
+            $(".usercrud").html(detailhtml);
     }
 
     $(function () {
@@ -49,6 +90,11 @@
                 });
         });
 
+        $('.btn-newuser').on('click', function(){
+
+                newUser();
+        });
+
         $('.btn-delete').on('click', function(){
             var id = $(this).attr('data-user')
                 $.ajax({
@@ -65,6 +111,8 @@
             var elem = $(this);
             var id = elem.attr('data-user');
             getUser(id);
+
+
         })
 
     })

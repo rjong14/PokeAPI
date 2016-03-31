@@ -20,27 +20,19 @@ block content
                       | #{us.local.email}
                   button.btn.btn-danger.pull-right.btn-delete(data-user='#{us._id}') Delete
         .panel-footer
-          button.btn.btn-send
+          button.btn.btn-send.btn-newuser
             span.glyphicon.glyphicon-plus new
   .col-md-8
     .panel.panel-poke.panel-crud
-        .panel-heading
+        .panel-heading.headinguser
           span.glyphicon.glyphicon-user
           | user
         .panel-body.usercrud
-          form.post-user.input-group()
-            .input-group
-              label Email
-              input.form-control(name='email', value='lolmail')
-              br
-              label Password
-              input.form-control(name='password', value='')
-              br
-              label Role
-              input.form-control(name='role', value='moot')
-            button.btn.btn-send(type='submit') Submit
+
   .hiddenhtml
     select.form-control(name='role')
       each ro in roles
         option(value="#{ro.name}") #{ro.name}
+  script.
+    $(function () {newUser()})
 
