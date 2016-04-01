@@ -88,24 +88,67 @@ module.exports = function(backEndRouter, User, Role){
                port: 80,
                path: '/api/v2/pokemon/1/'
            };
-           var response;
            
-           http.get(options, function(api) {
-               api.setEncoding('utf8');
-               api.on('data', function(chunk) {
-                   response += chunk;
+//           callback = function(response) {
+//              var txt = '';
+//
+//              //another chunk of data has been recieved, so append it to `txt`
+//              response.on('data', function (chunk) {
+//                txt += chunk;
+//              });
+//
+//               response.on('error', function(e) {
+//                console.log("Got error: " + e.message);
+//               });
+//
+//              //the whole response has been recieved, so we just print it out here
+//              response.on('end', function () {
+//                  var json = JSON.parse(txt);
+//                console.log(json.name);
+//              });
+//            }
+
+           var poke = user.pokemon;
+           var ifready = function (mons, poke){
+               console.log(mons + '-'+ poke.length);
+                if (mons == poke.length){
+                   console.log('lol');
+
+                   res[200](poke);
+               }
+           }
+
+           for(mons in poke){
+            callback = function(response) {
+              var txt = '';
+
+              //another chunk of data has been recieved, so append it to `txt`
+              response.on('data', function (chunk) {
+                txt += chunk;
+              });
+
+               response.on('error', function(e) {
+                console.log("Got error: " + e.message);
                });
-               api.on('end', function(ending) {
-                   console.log('No more data in response')
-                   console.log('logging response:')
-                   //json.parse(response);
-                   //var json = JSON.parse(response);
-                   var endResponse = response.slice(1,9);
-                   console.log(endResponse);
-               });
-           }).on('error', function(e) {
-               console.log("Got error: " + e.message);
-           });
+
+              //the whole response has been recieved, so we just print it out here
+              response.on('end', function () {
+                  var json = JSON.parse(txt);
+                  poke[mons].name = json.name;
+                console.log(json.name);
+                  ifready(mons, poke);
+              });
+            };
+                options.path = '/api/v2/pokemon/'+ poke[mons].pokeid +'/';
+
+               console.log(options.path);
+                http.get(options, callback).end();
+               //poke[mons].name = 'lol'+poke[mons].pokeid;
+
+
+           }
+
+
            
        });
     })

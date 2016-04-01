@@ -31,7 +31,8 @@ var userSchema = mongoose.Schema({
     },
     pokemon          : [{
         pokeid       : String,
-        caught_at    : Date        
+        caught_at    : Date,
+        name         : {type: String, required: false}
     }],
     role : {type: Schema.Types.ObjectId, ref: 'Role', required: false}
 });
