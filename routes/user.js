@@ -76,19 +76,36 @@ module.exports = function(backEndRouter, User, Role){
        User.findById(req.params.id, function(err, user){
            if(err){res[500](err);return;}
            //res[200](user.pokemon);
+           //var pokemons = user.pokemon;
+           //for (key in pokemons){
+           //    console.log(pokemons[key]);
+           //}
+           
+           
            
            var options = {
                host: 'pokeapi.co',
                port: 80,
                path: '/api/v2/pokemon/1/'
            };
+           var response;
            
            http.get(options, function(api) {
-               console.log(api.?);
+               api.setEncoding('utf8');
+               api.on('data', function(chunk) {
+                   response += chunk;
+               });
+               api.on('end', function(ending) {
+                   console.log('No more data in response')
+                   console.log('logging response:')
+                   //json.parse(response);
+                   //var json = JSON.parse(response);
+                   var endResponse = response.slice(1,9);
+                   console.log(endResponse);
+               });
            }).on('error', function(e) {
                console.log("Got error: " + e.message);
            });
-           
            
        });
     })
