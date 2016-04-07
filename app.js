@@ -51,11 +51,13 @@ app.use(flash());
 var Role = require('./models/Role');
 var User = require('./models/User');
 
+var UserRepo = require('./repos/UserRepo');
+
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, async);
 var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, UserRepo);
 
 //load in routes
 app.use('/api', backEndRouter);
