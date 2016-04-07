@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function(backEndRouter, User, Role){
+module.exports = function(backEndRouter, User, Role, Location){
     backEndRouter.route('/users')
     .get(function(req, res){
         User.find()
@@ -98,10 +98,10 @@ module.exports = function(backEndRouter, User, Role){
                api.on('end', function(ending) {
                    console.log('No more data in response')
                    console.log('logging response:')
+                   response = response.slice(9);
                    //json.parse(response);
-                   //var json = JSON.parse(response);
-                   var endResponse = response.slice(1,9);
-                   console.log(endResponse);
+                   var json = JSON.parse(response);
+                   console.log(response.name);
                });
            }).on('error', function(e) {
                console.log("Got error: " + e.message);
@@ -133,6 +133,21 @@ module.exports = function(backEndRouter, User, Role){
                 res[200](user);
             })
         })
+    })
+    
+    backEndRouter.route('/users/:id/location')
+    .post(function(req, res){
+        Location
+        .where('startLong').gte(req.body.long)
+        .where('endLong').lte(req.body.long)
+        .where('startLat').gte(req.body.lat)
+        .where('endLat').lte(req.body.lat)
+        .exec(function(err, data){
+            if(err){res[500](err);return;}
+            if(!data){res[400]('no data found');return;}  
+        })
+        
+        
     })
     
     //backEndRouter.route('/users/role/:name')
