@@ -1,188 +1,231 @@
 var http = require('http');
 
-module.exports = function(backEndRouter, User, Role, UserRepo){
+module.exports = function (backEndRouter, User, Role, UserRepo, async) {
     backEndRouter.route('/users')
-    .get(function(req, res){
-        console.log('get');
-        var lol = new UserRepo();
-        lol
-            .getAll()
-            .res();
-//        User.find()
-//            .exec(function(err, user){
-//            if (err){res[500](err);return;}
-//            res[200](user);
-//        })
-    })
-    .post(function(req, res){
-        var user = new User();
-        if (!req.body.email){res[400]('no email given'); return;};
-        if (!req.body.password){res[400]('no password given'); return;};
-        if (!req.body.role){res[400]('no role given'); return;};
-        Role.findOne({ name: req.body.role}, function (err, role){
-            if(!role){res[400]('no valid role given');return;};
-            
+        .get(function (req, res) {
+            //        console.log('get');
+            //        var lol = new UserRepo();
+            //        lol
+            //            .getAll()
+            //            .res();
+            User.find()
+                .exec(function (err, user) {
+                    if (err) {
+                        res[500](err);
+                        return;
+                    }
+                    res[200](user);
+                })
+        })
+        .post(function (req, res) {
             var user = new User();
-            user.local.email = req.body.email;
-            user.local.password = user.generateHash(req.body.password);
-            user.role = role._id;
-            user.save(function(err){
-                if (err){
+            if (!req.body.email) {
+                res[400]('no email given');
+                return;
+            };
+            if (!req.body.password) {
+                res[400]('no password given');
+                return;
+            };
+            if (!req.body.role) {
+                res[400]('no role given');
+                return;
+            };
+            Role.findOne({
+                name: req.body.role
+            }, function (err, role) {
+                if (!role) {
+                    res[400]('no valid role given');
+                    return;
+                };
+
+                var user = new User();
+                user.local.email = req.body.email;
+                user.local.password = user.generateHash(req.body.password);
+                user.role = role._id;
+                user.save(function (err) {
+                    if (err) {
+                        res[500](err);
+                        return;
+                    }
+                    res[201](user);
+                });
+            });
+        });
+
+    backEndRouter.route('/users/:id')
+        .get(function (req, res) {
+            User.findById(req.params.id)
+                .populate('role')
+                .exec(function (err, user) {
+                    if (err) {
+                        res[500](err);
+                        return;
+                    }
+                    res[200](user);
+                });
+        })
+        .put(function (req, res) {
+            var us = null;
+            User.findById(req.params.id, function (err, user) {
+                if (err) {
                     res[500](err);
                     return;
                 }
-                res[201](user);
-            });
-        });
-    });
-    
-    backEndRouter.route('/users/:id')
-    .get(function(req, res){
-        User.findById(req.params.id)
-            .populate('role')
-            .exec(function(err, user){
-            if (err){res[500](err);return;}
-            res[200](user);
-        });
-    })
-    .put(function(req,res){
-        var us = null;
-        User.findById(req.params.id, function(err, user){
-            if(err){
-                res[500](err);
-                return;
-            }
-            if (req.body.email){ user.local.email = req.body.email;};
-            if (req.body.password){ user.local.password = user.generateHash(req.body.password);};
-            if (req.body.role){
-                Role.findOne({ name: req.body.role}, function (err, role){
-                    if(!role){ res[400]('no valid role given'); return; };
-                    user.role = role._id;
-                    us = user;
-            })};
+                if (req.body.email) {
+                    user.local.email = req.body.email;
+                };
+                if (req.body.password) {
+                    user.local.password = user.generateHash(req.body.password);
+                };
+                if (req.body.role) {
+                    Role.findOne({
+                        name: req.body.role
+                    }, function (err, role) {
+                        if (!role) {
+                            res[400]('no valid role given');
+                            return;
+                        };
+                        user.role = role._id;
+                        us = user;
+                    })
+                };
 
-        }).exec(function(err, data){
-                us.save(function(err){
+            }).exec(function (err, data) {
+                us.save(function (err) {
                     console.log('2nd exec');
-                if(err){res[500](err); return;}
-                res[200](data);
+                    if (err) {
+                        res[500](err);
+                        return;
+                    }
+                    res[200](data);
+                });
+            })
+        })
+        .delete(function (req, res) {
+            User.remove({
+                _id: req.params.id
+            }, function (err, user) {
+                if (err) {
+                    res[500](err);
+                    return;
+                }
+                res[200](user);
             });
-        })
-    })
-    .delete(function(req, res){
-        User.remove({ _id: req.params.id}, function(err, user){
-            if(err){ res[500](err); return; }
-            res[200](user);
         });
-    });
-    
+
     backEndRouter.route('/users/:id/pokemon')
-    .get(function(req, res){
-       User.findById(req.params.id, function(err, user){
-           if(err){res[500](err);return;}
-           //res[200](user.pokemon);
-           //var pokemons = user.pokemon;
-           //for (key in pokemons){
-           //    console.log(pokemons[key]);
-           //}
-           
-           
-           
-           var options = {
-               host: 'pokeapi.co',
-               port: 80,
-               path: '/api/v2/pokemon/1/'
-           };
-           
-//           callback = function(response) {
-//              var txt = '';
-//
-//              //another chunk of data has been recieved, so append it to `txt`
-//              response.on('data', function (chunk) {
-//                txt += chunk;
-//              });
-//
-//               response.on('error', function(e) {
-//                console.log("Got error: " + e.message);
-//               });
-//
-//              //the whole response has been recieved, so we just print it out here
-//              response.on('end', function () {
-//                  var json = JSON.parse(txt);
-//                console.log(json.name);
-//              });
-//            }
-
-           var poke = user.pokemon;
-           var ifready = function (mons, poke){
-               console.log(mons + '-'+ poke.length);
-                if (mons == poke.length){
-                   console.log('lol');
-
-                   res[200](poke);
-               }
-           }
-
-           for(mons in poke){
-            callback = function(response) {
-              var txt = '';
-
-              //another chunk of data has been recieved, so append it to `txt`
-              response.on('data', function (chunk) {
-                txt += chunk;
-              });
-
-               response.on('error', function(e) {
-                console.log("Got error: " + e.message);
-               });
-
-              //the whole response has been recieved, so we just print it out here
-              response.on('end', function () {
-                  var json = JSON.parse(txt);
-                  poke[mons].name = json.name;
-                console.log(json.name);
-                  ifready(mons, poke);
-              });
+        .get(function (req, res) {
+            var options = {
+                host: 'pokeapi.co',
+                port: 80,
+                path: '/api/v2/pokemon/1/'
             };
-                options.path = '/api/v2/pokemon/'+ poke[mons].pokeid +'/';
-
-               console.log(options.path);
-                http.get(options, callback).end();
-               //poke[mons].name = 'lol'+poke[mons].pokeid;
+            var poke = '';
 
 
-           }
+            async.series({
+                one: function(callback){
+                        console.log('first');
+                        User.findById(req.params.id)
+                        .exec(function (err, user) {
+                            if (err) {
+                                res[500](err);
+                                return;
+                            }
+                            poke = user.pokemon;
+                            console.log('beginning');
+                            callback(null, 1);
+                        });
+                },
+                two: function(callback){
+                    console.log('second');
+                    var newpoke = poke;
 
 
-           
-       });
-    })
-    .post(function(req, res){
-        User.findById(req.params.id, function(err, user){
-            if(err){res[500](err);return;}
-            
-            if (!req.body.pokeid){res[400]('no pokeid given'); return;};
-            console.log(req.body.pokeId);
-            user.pokemon.push({pokeid : req.body.pokeid, caught_at: new Date()})
-            user.save(function(err){
-                if(err){res[500](err);return;}
-                res[200](user);
-            })
+                    async.eachSeries(newpoke, function (item, eachcb) {
+                        jsoncall = function (response) {
+                            var txt = '';
+
+                            //another chunk of data has been recieved, so append it to `txt`
+                            response.on('data', function (chunk) {
+                                txt += chunk;
+                            });
+
+                            response.on('error', function (e) {
+                                console.log("Got error: " + e.message);
+                            });
+
+                            //the whole response has been recieved, so we just print it out here
+                            response.on('end', function () {
+                                var json = JSON.parse(txt);
+                                item.name = json.name;
+                                console.log(json.name);
+                            });
+                        };
+                            options.path = '/api/v2/pokemon/' + item.pokeid + '/';
+                            console.log(options.path);
+                            http.get(options, jsoncall);
+                            eachcb();
+                    }, function () {
+                      setTimeout(function(){
+                        callback(null, newpoke);
+                    }, 5000);
+                    });
+                }
+            },
+            function(err, results) {
+                console.log(results.two);
+                res[200](results.two);
+            });
+
+        })
+        .post(function (req, res) {
+            User.findById(req.params.id, function (err, user) {
+                if (err) {
+                    res[500](err);
+                    return;
+                }
+
+                if (!req.body.pokeid) {
+                    res[400]('no pokeid given');
+                    return;
+                };
+                console.log(req.body.pokeId);
+                user.pokemon.push({
+                    pokeid: req.body.pokeid,
+                    caught_at: new Date()
+                })
+                user.save(function (err) {
+                    if (err) {
+                        res[500](err);
+                        return;
+                    }
+                    res[200](user);
+                })
+            });
         });
-    });
-    
+
     backEndRouter.route('/users/:id/pokemon/:pokeid')
-    .delete(function(req, res){
-        User.findById(req.params.id, function(err, user){
-            if(err){res[500](err);return;}
-            user.pokemon.pull({_id: req.params.pokeid});
-            user.save(function(err){
-                if(err){res[500](err);return;}
-                res[200](user);
+        .delete(function (req, res) {
+            User.findById(req.params.id, function (err, user) {
+                if (err) {
+                    res[500](err);
+                    return;
+                }
+                user.pokemon.pull({
+                    _id: req.params.pokeid
+                });
+                user.save(function (err) {
+                    if (err) {
+                        res[500](err);
+                        return;
+                    }
+                    res[200](user);
+                })
             })
         })
-    })
-    
+
     //backEndRouter.route('/users/role/:name')
     //.get(function(req, res){
     //    Role.findOne({'name': req.params.name}, function(err, role){
@@ -195,6 +238,6 @@ module.exports = function(backEndRouter, User, Role, UserRepo){
     //        })
     //    })
     //})
-    
+
     return backEndRouter;
 };
