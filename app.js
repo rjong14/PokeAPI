@@ -50,22 +50,23 @@ app.use(flash());
 //models
 var Role = require('./models/Role');
 var User = require('./models/User');
-
-var UserRepo = require('./repos/UserRepo');
+var Location = require('./models/Location');
 
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, async);
 var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, UserRepo, async);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location);
+var locationRoutes = require('./routes/location')(backEndRouter, Location);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);
 
 //load in routes
 app.use('/api', backEndRouter);
 app.use('/', frontEndRouter);
-app.use(frontendRoute);
-app.use(authenticationRoute);
-app.use(roleRoutes);
-app.use(userRoutes);
+//app.use(frontendRoute);
+//app.use(authenticationRoute);
+//app.use(roleRoutes);
+//app.use(userRoutes);
 
 //Middleware
 backEndRouter.get('/', function (req, res) {

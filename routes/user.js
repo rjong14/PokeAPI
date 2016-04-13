@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, UserRepo, async) {
+module.exports = function (backEndRouter, User, Role, Location, async) {
     backEndRouter.route('/users')
         .get(function (req, res) {
             //        console.log('get');
@@ -116,94 +116,77 @@ module.exports = function (backEndRouter, User, Role, UserRepo, async) {
 
     backEndRouter.route('/users/:id/pokemon')
         .get(function (req, res) {
-            var options = {
-                host: 'pokeapi.co',
-                port: 80,
-                path: '/api/v2/pokemon/1/'
-            };
-            var poke = '';
+        var options = {
+            host: 'pokeapi.co',
+            port: 80,
+            path: '/api/v2/pokemon/1/'
+        };
+        var poke = '';
 
 
-            async.series({
-                one: function(callback){
-                        console.log('first');
-                        User.findById(req.params.id)
-                        .exec(function (err, user) {
-                            if (err) {
-                                res[500](err);
-                                return;
-                            }
-                            poke = user.pokemon;
-                            console.log('beginning');
-                            callback(null, 1);
-                        });
-                },
-                two: function(callback){
-                    console.log('second');
-                    var newpoke = poke;
-
-
-                    async.eachSeries(newpoke, function (item, eachcb) {
-                        jsoncall = function (response) {
-                            var txt = '';
-
-                            //another chunk of data has been recieved, so append it to `txt`
-                            response.on('data', function (chunk) {
-                                txt += chunk;
-                            });
-
-                            response.on('error', function (e) {
-                                console.log("Got error: " + e.message);
-                            });
-
-                            //the whole response has been recieved, so we just print it out here
-                            response.on('end', function () {
-                                var json = JSON.parse(txt);
-                                item.name = json.name;
-                                console.log(json.name);
-                            });
-                        };
-                            options.path = '/api/v2/pokemon/' + item.pokeid + '/';
-                            console.log(options.path);
-                            http.get(options, jsoncall);
-                            eachcb();
-                    }, function () {
-                      setTimeout(function(){
-                        callback(null, newpoke);
-                    }, 5000);
-                    });
-                }
+        async.series({
+            one: function(callback){
+                console.log('first');
+                User.findById(req.params.id)
+                    .exec(function (err, user) {
+                    if (err) {res[500](err);return;}
+                    poke = user.pokemon;
+                    console.log('beginning');
+                    callback(null, 1);
+                });
             },
-            function(err, results) {
-                console.log(results.two);
-                res[200](results.two);
-            });
+            two: function(callback){
+                console.log('second');
+                var newpoke = poke;
 
-        })
-        .post(function (req, res) {
-            User.findById(req.params.id, function (err, user) {
-                if (err) {
-                    res[500](err);
-                    return;
-                }
 
-                if (!req.body.pokeid) {
-                    res[400]('no pokeid given');
-                    return;
-                };
-                console.log(req.body.pokeId);
-                user.pokemon.push({
-                    pokeid: req.body.pokeid,
-                    caught_at: new Date()
-                })
-                user.save(function (err) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
-                    res[200](user);
-                })
-            });
+                async.eachSeries(newpoke, function (item, eachcb) {
+                    jsoncall = function (response) {
+                        var txt = '';
+
+                    //another chunk of data has been recieved, so append it to `txt`
+                        response.on('data', function (chunk) {
+                            txt += chunk;
+                        });
+
+                        response.on('error', function (e) {
+                            console.log("Got error: " + e.message);
+                        });
+
+                        //the whole response has been recieved, so we just print it out here
+                        response.on('end', function () {
+                            var json = JSON.parse(txt);
+                            item.name = json.name;
+                            console.log(json.name);
+                        });
+                    };
+                    options.path = '/api/v2/pokemon/' + item.pokeid + '/';
+                    console.log(options.path);
+                    http.get(options, jsoncall);
+                    eachcb();
+                }, function () {
+                    setTimeout(function(){
+                    callback(null, newpoke);
+                    }, 5000);
+                });
+            }
+        },function(err, results) {
+            console.log(results.two);
+            res[200](results.two);
+        });
+
+    })
+    .post(function(req, res){
+        User.findById(req.params.id, function(err, user){
+            if(err){res[500](err);return;}
+            
+            if (!req.body.pokeid){res[400]('no pokeid given'); return;};
+            console.log(req.body.pokeId);
+            user.pokemon.push({pokeid : req.body.pokeid, caught_at: new Date()})
+            user.save(function(err){
+                if(err){res[500](err);return;}
+                res[200](user);
+            })
         });
 
     backEndRouter.route('/users/:id/pokemon/:pokeid')
@@ -225,7 +208,35 @@ module.exports = function (backEndRouter, User, Role, UserRepo, async) {
                 })
             })
         })
-
+    })
+    
+    backEndRouter.route('/users/:id/location')
+    .post(function(req, res){
+        if(!req.body.long){res[500]('no long given');return;};
+        if(!req.body.lat){res[500]('no lat given');return;};
+        Location
+        .where('startLong').lte(req.body.long)
+        .where('endLong').gte(req.body.long)
+        .where('startLat').lte(req.body.lat)
+        .where('endLat').gte(req.body.lat)
+        .lean()
+        .exec(function(err, data){
+            if(err){res[500](err);return;}
+            if(!data){res[400]('no data found');return;}
+            console.log(data[0].pokeid);
+            
+            User.findById(req.params.id, function(err, user){
+                var test = user.toObject();
+                user.pokemon.push({pokeid : data[0].pokeid, caught_at: new Date()})
+                console.log('adding'+ data[0].pokeid)
+                user.save(function(err){
+                    if(err){res[500](err);return;}
+                    res[200](user);
+                })
+            })
+        })
+    })
+    
     //backEndRouter.route('/users/role/:name')
     //.get(function(req, res){
     //    Role.findOne({'name': req.params.name}, function(err, role){
