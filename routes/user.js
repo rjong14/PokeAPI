@@ -137,17 +137,29 @@ module.exports = function(backEndRouter, User, Role, Location){
     
     backEndRouter.route('/users/:id/location')
     .post(function(req, res){
+        if(!req.body.long){res[500]('no long given');return;};
+        if(!req.body.lat){res[500]('no lat given');return;};
         Location
-        .where('startLong').gte(req.body.long)
-        .where('endLong').lte(req.body.long)
-        .where('startLat').gte(req.body.lat)
-        .where('endLat').lte(req.body.lat)
+        .where('startLong').lte(req.body.long)
+        .where('endLong').gte(req.body.long)
+        .where('startLat').lte(req.body.lat)
+        .where('endLat').gte(req.body.lat)
+        .lean()
         .exec(function(err, data){
             if(err){res[500](err);return;}
-            if(!data){res[400]('no data found');return;}  
+            if(!data){res[400]('no data found');return;}
+            console.log(data[0].pokeid);
+            
+            User.findById(req.params.id, function(err, user){
+                var test = user.toObject();
+                user.pokemon.push({pokeid : data[0].pokeid, caught_at: new Date()})
+                console.log('adding'+ data[0].pokeid)
+                user.save(function(err){
+                    if(err){res[500](err);return;}
+                    res[200](user);
+                })
+            })
         })
-        
-        
     })
     
     //backEndRouter.route('/users/role/:name')

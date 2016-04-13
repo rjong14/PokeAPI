@@ -56,5 +56,4 @@ module.exports = function(backEndRouter, Role){
     });
     
     return backEndRouter;
-    return router;
 }

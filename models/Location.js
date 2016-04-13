@@ -3,11 +3,11 @@ var mongoose = require('mongoose');
 
 // define the schema for our user model
 var locationSchema = mongoose.Schema({
-    startLong : Number,
-    startLat : Number,
-    endLong : Number,
-    endLat : Number,
-    pokeid : Number
+    startLong : { type: Number, required: true },
+    startLat : { type: Number, required: true },
+    endLong : { type: Number, required: true },
+    endLat : { type: Number, required: true },
+    pokeid : { type: Number, required: true }
 });
 
 // create the model for users and expose it to our app
