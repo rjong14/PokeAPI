@@ -58,7 +58,7 @@ var authenticationRoute = require('./routes/authentication')(backEndRouter, pass
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location);
 var locationRoutes = require('./routes/location')(backEndRouter, Location);
-//var errorRoutes = require('./routes/errorHandler')(backEndRouter, frontEndRouter);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);
 
 //load in routes
 app.use('/api', backEndRouter);
