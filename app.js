@@ -57,8 +57,8 @@ var authenticationRoute = require('./routes/authentication')(frontEndRouter, pas
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location);
 var locationRoutes = require('./routes/location')(backEndRouter, Location);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);
-
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);                        
+                                          
 //load in routes
 app.use('/api', backEndRouter);
 app.use('/', frontEndRouter);
@@ -78,8 +78,7 @@ app.use(function (req, res, next) {
     next(err);
 });
 
-// error handlers
-
+// error handlers->
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {

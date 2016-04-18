@@ -42,8 +42,7 @@ module.exports = function(passport, User) {
                     return done(null, newUser);
                 });
             }
-        });    
-
+        });
         });
 
     }));
@@ -58,17 +57,14 @@ module.exports = function(passport, User) {
             if (err) { return done(err); }
             if (!user) { return done(null, false, req.flash('loginMessage', 'No user found.')); }
             if (!user.validPassword(password)) { return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); }
-            
             return done(null, user);
         });
-
     }));
     
     passport.use('facebook', new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL
-
     },
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
