@@ -3,4 +3,5 @@ extends errorLayout
 block content
   h1= message
   h2= error.status
+  h3= error.reqlink
   pre #{error.stack}
