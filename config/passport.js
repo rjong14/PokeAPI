@@ -64,7 +64,7 @@ module.exports = function(passport, User) {
 
     }));
     
-    passport.use(new FacebookStrategy({
+    passport.use('facebook', new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
         callbackURL     : configAuth.facebookAuth.callbackURL
