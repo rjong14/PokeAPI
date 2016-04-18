@@ -40,6 +40,38 @@ var myUser = {
         })
     }
 
+    var getLocation = function (loc) {
+        var call_url = '/api/locations/' + loc;
+        var Location='';
+        $.getJSON(call_url, function (data) {
+            Location = data;
+
+            console.log(data.data);
+
+            headerhtml = '<span class="fa fa-pencil"></span>'
+                    + 'Edit ' + Location.data._id;
+            detailhtml = '<form class="put-location input-group" data-location="'+Location.data._id+'">'
+                      + '<div class="input-group">'
+                        + '<label>startLong</label>'
+                        + '<input name="startLong" value="'+Location.data.startLong+'" class="form-control"/><br/>'
+                        + '<label>startLat</label>'
+                        + '<input name="startLat" value="'+Location.data.startLat+'" class="form-control"/><br/>'
+                        + '<label>endLong</label>'
+                        + '<input name="endLong" value="'+Location.data.endLong+'" class="form-control"/><br/>'
+                        + '<label>endLat</label>'
+                        + '<input name="endLat" value="'+Location.data.endLat+'" class="form-control"/><br/>'
+                        + '<label>pokeid</label>'
+                        + '<input name="pokeid" value="'+Location.data.pokeid+'" class="form-control"/><br/>'
+                      + '</div>'
+                       +' <button type="submit" class="btn btn-put">Submit</button>'
+                    + '</form>';
+            $(".locationcrud").empty();
+            $('.headinglocation').html(headerhtml);
+            $(".locationcrud").html(detailhtml);
+        })
+
+    }
+
     var newUser = function () {
         headerhtml = '<span class="fa fa-user-plus"></span>'
                     + 'New User';
@@ -61,11 +93,42 @@ var myUser = {
             $(".usercrud").html(detailhtml);
     }
 
+        var newLocation = function () {
+        headerhtml = '<span class="fa fa-user-plus"></span>'
+                    + 'New Location';
+        $('.headinglocation').html(headerhtml);
+
+        detailhtml = '<form class="post-location input-group">'
+              + '<div class="input-group">'
+                + '<label>startLong</label>'
+                + '<input name="startLong" value="" class="form-control"/><br/>'
+                + '<label>startLat</label>'
+                + '<input name="startLat" value="" class="form-control"/><br/>'
+                + '<label>endLong</label>'
+                + '<input name="endLong" value="" class="form-control"/><br/>'
+                + '<label>endLat</label>'
+                + '<input name="endLat" value="" class="form-control"/><br/>'
+                + '<label>pokeid</label>'
+                + '<input name="pokeid" value="" class="form-control"/><br/>'
+              + '</div>'
+               +' <button type="submit" class="btn btn-send">Submit</button>'
+            + '</form>';
+
+            $(".locationcrud").html(detailhtml);
+    }
+
     $(function () {
         'use strict'
 
         $( ".post-user" ).submit(function( event ) {
             $.post('/api/users/', $('.post-user').serialize());
+            event.preventDefault();
+            location.reload();
+        });
+
+        $( ".post-location" ).submit(function( event ) {
+            console.log($('.post-location').serialize());
+            $.post('/api/locations/', $('.post-location').serialize());
             event.preventDefault();
             location.reload();
         });
@@ -86,23 +149,58 @@ var myUser = {
                 })
                 .done(function (msg) {
                     alert("Data Saved: " + msg);
-                    location.reload();
+                    //location.reload();
                 });
         });
 
-        $('.btn-newuser').on('click', function(){
 
+        $('.locationcrud').on('click', '.btn-put', function(){
+
+
+            var form = $('.locationcrud').find('.put-location')
+            var id = form.attr('data-location');
+            var data = form.serialize()
+            console.log("/api/locations/"+id);
+            console.log(data);
+            $.ajax({
+                    method: "PUT",
+                    url: "/api/locations/"+id,
+                    data: data
+                })
+                .done(function (msg) {
+                    console.log("Data Saved: " + msg);
+                    //location.reload();
+
+                });
+            getLocation(id);
+        });
+
+        $('.btn-newuser').on('click', function(){
                 newUser();
         });
 
-        $('.btn-delete').on('click', function(){
+        $('.btn-newlocation').on('click', function(){
+                newLocation();
+        });
+
+        $('.btn-delete-user').on('click', function(){
             var id = $(this).attr('data-user')
                 $.ajax({
                     method: "DELETE",
                     url: "/api/users/"+id,
                 })
                 .done(function (msg) {
-                    alert("Data Saved: " + msg);
+                    location.reload();
+                });
+        })
+
+        $('.btn-delete-location').on('click', function(){
+            var id = $(this).attr('data-location')
+                $.ajax({
+                    method: "DELETE",
+                    url: "/api/locations/"+id,
+                })
+                .done(function (msg) {
                     location.reload();
                 });
         })
@@ -111,6 +209,14 @@ var myUser = {
             var elem = $(this);
             var id = elem.attr('data-user');
             getUser(id);
+
+
+        })
+
+        $('.location-list-item').on('click', function () {
+            var elem = $(this);
+            var id = elem.attr('data-location');
+            getLocation(id);
 
 
         })
