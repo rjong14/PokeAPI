@@ -4,6 +4,27 @@ block content
   .col-lg-12
     h1= title
     p Welcome to #{title}
-    .panel.panel-default
-      .panel-heading
-        | Locations
+  .col-md-4
+      .panel.panel-poke.panel-crud
+        .panel-heading
+          | All Locations
+        .panel-body.chat
+          ul
+            each lo in locations
+              li.location-list-item.clearfix.draggable.deletehide( id='#{lo._id}', item='#{lo._id}', data-location='#{lo._id}')
+                  .header
+                    strong.primary-font
+                      | #{lo._id}
+                  button.btn.btn-danger.pull-right.btn-delete-location(data-location='#{lo._id}') Delete
+        .panel-footer
+          button.btn.btn-send.btn-newlocation
+            span.glyphicon.glyphicon-plus new
+  .col-md-8
+    .panel.panel-poke.panel-crud
+        .panel-heading.headinglocation
+          span.glyphicon.glyphicon-user
+          | location
+        .panel-body.locationcrud
+
+  script.
+    $(function () {newLocation()})

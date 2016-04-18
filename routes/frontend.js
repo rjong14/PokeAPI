@@ -1,4 +1,4 @@
-module.exports = function (frontEndRouter, User, Role, async) {
+module.exports = function (frontEndRouter, User, Role, Location, async) {
     frontEndRouter.route('/')
         .get(function (req, res) {
             res.render('index', {
@@ -43,9 +43,16 @@ module.exports = function (frontEndRouter, User, Role, async) {
 
     frontEndRouter.route('/locations')
         .get(function (req, res) {
-            res.render('locations', {
-                title: 'Locations'
-            });
+            Location.find()
+            .exec(function(err, locations){
+                if (err){res[500](err);return;}
+                res.render('locations', {
+                    title: 'Locations',
+                    locations: locations
+                });
+            })
+
+
         });
 
     return frontEndRouter;
