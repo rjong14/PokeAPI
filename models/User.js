@@ -8,8 +8,8 @@ var Schema       = mongoose.Schema;
 var userSchema = mongoose.Schema({
 
     local            : {
-        email        : { type: String, required: true },
-        password     : { type: String, required: true }
+        email        : { type: String, required: false },
+        password     : { type: String, required: false }
     },
     facebook         : {
         id           : String,

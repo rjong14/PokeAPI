@@ -64,7 +64,8 @@ module.exports = function(passport, User) {
     passport.use('facebook', new FacebookStrategy({
         clientID        : configAuth.facebookAuth.clientID,
         clientSecret    : configAuth.facebookAuth.clientSecret,
-        callbackURL     : configAuth.facebookAuth.callbackURL
+        callbackURL     : configAuth.facebookAuth.callbackURL,
+        profileFields   : configAuth.facebookAuth.profileFields
     },
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
