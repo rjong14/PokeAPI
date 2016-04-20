@@ -9,7 +9,7 @@ var GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy;
 var configAuth = require('./auth');
 
 // expose this function to our app using module.exports
-module.exports = function(passport, User) {
+module.exports = function(passport, User, Role) {
     
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -37,14 +37,18 @@ module.exports = function(passport, User) {
                 var newUser            = new User();
                 newUser.local.email    = email;
                 newUser.local.password = newUser.generateHash(password);
-
-                newUser.save(function(err) {
-                    if (err){ throw err; }
-                    return done(null, newUser);
+                
+                Role.findOne({ name : 'user' }, function(err, role){
+                    if(!role){
+                        return done(null, false, req.flash('signupMessage', 'Internal server error. Please contact administrator'));}
+                    newUser.role = role._id;
+                    newUser.save(function(err) {
+                        if (err){ throw err; }
+                        return done(null, newUser);
+                    });
                 });
-            }
-        });
-        });
+            }}) 
+        })
     }));
 
     passport.use('local-login', new LocalStrategy({
@@ -82,9 +86,14 @@ module.exports = function(passport, User) {
                     newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
                     newUser.facebook.email = profile.emails[0].value;
                     
-                    newUser.save(function(err) {
-                        if (err){throw err;}
-                        return done(null, newUser);
+                    Role.findOne({ name : 'user' }, function(err, role){
+                        if(!role){
+                            return done(null, false, req.flash('signupMessage', 'Internal server error. Please contact administrator'));}
+                        newUser.role = role._id;
+                        newUser.save(function(err) {
+                            if (err){ throw err; }
+                            return done(null, newUser);
+                        });
                     });
                 }
             });
@@ -109,10 +118,14 @@ module.exports = function(passport, User) {
                     newUser.google.name  = profile.displayName;
                     newUser.google.email = profile.emails[0].value;
                     
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
+                    Role.findOne({ name : 'user' }, function(err, role){
+                        if(!role){
+                            return done(null, false, req.flash('signupMessage', 'Internal server error. Please contact administrator'));}
+                        newUser.role = role._id;
+                        newUser.save(function(err) {
+                            if (err){ throw err; }
+                            return done(null, newUser);
+                        });
                     });
                 }
             });

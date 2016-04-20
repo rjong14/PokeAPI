@@ -25,7 +25,7 @@ var Location = require('./models/Location');
 
 //configuration
 mongoose.connect(configDB.url);
-require('./config/passport')(passport, User);
+require('./config/passport')(passport, User, Role);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
