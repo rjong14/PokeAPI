@@ -35,6 +35,14 @@ module.exports = function(frontEndRouter, passport){
         failureRedirect : '/login'
     }));
     
+    frontEndRouter.route('/profile')
+    .get(function(req, res){
+        if(req.isAuthenticated()){
+            res[200](req.user);
+        } else {
+            res[400]('user not logged in')
+        }
+    });
     
     //log out
     frontEndRouter.route('/logout')
