@@ -18,9 +18,14 @@ var backEndRouter = express.Router();
 var frontEndRouter = express.Router();
 var app = express();
 
+//models
+var Role = require('./models/Role');
+var User = require('./models/User');
+var Location = require('./models/Location');
+
 //configuration
 mongoose.connect(configDB.url);
-//require('./config/passport')(passport); uncomment after implementing passport fully
+require('./config/passport')(passport, User, Role);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,27 +51,17 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-
-//models
-var Role = require('./models/Role');
-var User = require('./models/User');
-var Location = require('./models/Location');
-
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Location, async);
-var authenticationRoute = require('./routes/authentication')(backEndRouter, passport);
+var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location);
 var locationRoutes = require('./routes/location')(backEndRouter, Location);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);
-
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);                        
+                                          
 //load in routes
 app.use('/api', backEndRouter);
 app.use('/', frontEndRouter);
-//app.use(frontendRoute);
-//app.use(authenticationRoute);
-//app.use(roleRoutes);
-//app.use(userRoutes);
 
 //Middleware
 backEndRouter.get('/', function (req, res) {
@@ -79,11 +74,11 @@ backEndRouter.get('/', function (req, res) {
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
+    err.reqlink = req.url
     next(err);
 });
 
-// error handlers
-
+// error handlers->
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
