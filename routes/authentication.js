@@ -11,24 +11,30 @@ module.exports = function(frontEndRouter, passport){
         failureFlash : true
     }));
     
-    //app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-    
     frontEndRouter.route('/auth/facebook')
-        .get(passport.authenticate('facebook', { scope : 'email' }));      
-//    frontEndRouter.route('/auth/facebook')
-//    // route for facebook authentication and login
-//    .get(function(req, res){
-//        console.log('testing')
-//        passport.authenticate('facebook', { scope : 'email' });
-//    });
+    .get(passport.authenticate('facebook', {
+        scope : 'email' 
+    }));
 
     frontEndRouter.route('/auth/facebook/callback')
     // handle the callback after facebook has authenticated the user
     .get(passport.authenticate('facebook', {
         successRedirect : '/profile',
-        failureRedirect : '/',
+        failureRedirect : '/login',
         scope:['email']
     }));
+    
+    frontEndRouter.route('/auth/google')
+    .get(passport.authenticate('google', {
+        scope : ['profile', 'email']
+    }));
+    
+    frontEndRouter.route('/auth/google/callback')
+    .get(passport.authenticate('google', {
+        successRedirect : '/profile',
+        failureRedirect : '/login'
+    }));
+    
     
     //log out
     frontEndRouter.route('/logout')
