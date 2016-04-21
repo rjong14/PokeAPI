@@ -113,6 +113,16 @@ module.exports = function (backEndRouter, User, Role, Location, async) {
                 res[200](user);
             });
         });
+    
+    backEndRouter.route('/profile')
+    //get logged in user
+    .get(function(req, res){
+        if(req.isAuthenticated()){
+            res[200](req.user);
+        } else {
+            res[400]('user not logged in')
+        }
+    });
 
     backEndRouter.route('/users/:id/pokemon')
         .get(function (req, res) {
