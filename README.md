@@ -17,7 +17,6 @@ location
 - pokemon
 
 role
-- id
 - name
 
 todo:
