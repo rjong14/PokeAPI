@@ -6,7 +6,7 @@
 - username
 - password
 - pokemon
-- pokeballs
+- role
 
 -- location
 - long
