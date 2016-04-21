@@ -2,17 +2,23 @@
 
 -- documents
 
--- users
-- username
-- password
+users
+- local login
+- facebook login
+- google login
 - pokemon
 - role
 
--- location
-- long
-- lat
+location
+- start long
+- start lat
+- end long
+- end lat
 - pokemon
 
+role
+- id
+- name
 
 todo:
 - collectie filteren
