@@ -2,15 +2,29 @@
 
 -- documents
 
--- users
-- username
-- password
+users
+- local login
+- facebook login
+- google login
 - pokemon
-- pokeballs
+- role
 
--- location
-- long
-- lat
+location
+- start long
+- start lat
+- end long
+- end lat
 - pokemon
 
+role
+- name
+
+todo:
+- collectie filteren
+- autorization
+- testen
+- documentatie
+- pagination
+- externe validatie???
+- mongoose extension methods???
 
