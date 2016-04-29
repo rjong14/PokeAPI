@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 
 // define the schema for our user model
 var roleSchema = mongoose.Schema({
-    id               : String,
     name             : String
 });
 
