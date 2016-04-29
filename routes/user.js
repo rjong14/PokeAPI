@@ -1,13 +1,13 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async) {
+module.exports = function (backEndRouter, User, Role, Location, async, UserRepo) {
     backEndRouter.route('/users')
         .get(function (req, res) {
-            //        console.log('get');
-            //        var lol = new UserRepo();
-            //        lol
-            //            .getAll()
-            //            .res();
+//                    console.log('get');
+//                    var lol = new UserRepo();
+//                    lol
+//                        .getAll()
+//                        .res();
             User.find()
                 .exec(function (err, user) {
                     if (err) {
