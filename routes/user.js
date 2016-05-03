@@ -56,7 +56,8 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                 };
                 if (req.body.password) {
                     user.local.password = user.generateHash(req.body.password);
-                };
+                };                
+                
                 async.parallel([
                     function(callback){
                         if (req.body.role) {
@@ -69,13 +70,13 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                             callback(null);
                         }
                     }
-                ]),
-                function(err1){
+                ],
+                function(err){
                     user.save(function(err){
-                    if (err) { res[500](err);return;}
-                    res[200](data);
+                        if (err) { res[500](err);return;}
+                        res[200](user);
                     })
-                }
+                })
             })
     })
     .delete(function (req, res) {
