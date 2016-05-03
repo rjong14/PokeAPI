@@ -25,3 +25,19 @@ UserRepo.prototype.res = function (next) {
     console.log('res');
     res[200](this.data);
 }
+/*
+methods:
+ - get
+ - getAll
+ - findBy....
+ - remove
+ - getWithRole
+ 
+stuff to look up
+ - interface
+   - werkt dit in javascript of is het volledig overbodig
+ - overerven
+   - van main(?) repo
+ - dependency injection
+   - model injecten in main repo
+*/

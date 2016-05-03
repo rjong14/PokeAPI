@@ -1,6 +1,14 @@
 var http = require('http');
 
 module.exports = function (backEndRouter, User, Role, Location, async) {
+    backEndRouter.route('/test')
+        .get(function(req, res){
+        var mainRepositoryTest = require('../repos/mainRepo')
+        mainRepositoryTest.prototype.SetModel(User, function(err){});
+            mainRepositoryTest.prototype.GetAll();
+
+    });
+    
     backEndRouter.route('/users')
         .get(function (req, res) {
             //        console.log('get');
