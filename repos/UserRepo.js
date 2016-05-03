@@ -11,14 +11,13 @@ function UserRepo (){
 UserRepo.prototype.data = '';
 
 UserRepo.prototype.getAll = function (next) {
-    this.user.find()
-            .exec(function(err, response){
+    this.user.find(function(err, response){
              console.log('lol');
              console.log(response);
             //if (err){res[500](err);return;}
             this.data = response;
-        })
-    return this;
+
+        }).exec(function(err, response){return this;} )
 }
 
 UserRepo.prototype.res = function (next) {

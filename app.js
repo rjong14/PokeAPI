@@ -17,6 +17,8 @@ require('json-response');
 var backEndRouter = express.Router();
 var frontEndRouter = express.Router();
 var app = express();
+// call socket.io to the app
+app.io = require('socket.io')();
 
 //models
 var Role = require('./models/Role');
@@ -55,7 +57,6 @@ app.use(flash());
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Location, async);
 var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location);
 var locationRoutes = require('./routes/location')(backEndRouter, Location);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);                        
                                           
@@ -101,5 +102,10 @@ app.use(function (err, req, res, next) {
     });
 });
 
+
+// start listen with socket.io
+app.io.on('connection', function(socket){
+  console.log('IMA CHRGN MA LZR');
+});
 
 module.exports = app;
