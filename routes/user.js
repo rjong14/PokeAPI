@@ -1,13 +1,8 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async, UserRepo) {
+module.exports = function (backEndRouter, User, Role, Location, async, authorize) {
     backEndRouter.route('/users')
-        .get(function (req, res) {
-//                    console.log('get');
-//                    var lol = new UserRepo();
-//                    lol
-//                        .getAll()
-//                        .res();
+        .get(authorize.isAdmin, function (req, res) {
             User.find()
                 .exec(function (err, user) {
                     if (err) {
@@ -31,6 +26,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                 user.local.email = req.body.email;
                 user.local.password = user.generateHash(req.body.password);
                 user.role = role._id;
+                
                 user.save(function (err) {
                     if (err)      {res[500](err);return;}
                     res[201](user);

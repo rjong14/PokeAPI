@@ -12,6 +12,7 @@ var session = require('express-session')
 var configDB = require('./config/database.js');
 var async = require('async');
 require('json-response');
+var authorize = require('./modules/authorize');
 
 //make app and router
 var backEndRouter = express.Router();
@@ -58,7 +59,7 @@ var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Loc
 var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
 var roleRoutes = require('./routes/role')(backEndRouter, Role);
 var locationRoutes = require('./routes/location')(backEndRouter, Location);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);                        
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize);                        
                                           
 //load in routes
 app.use('/api', backEndRouter);

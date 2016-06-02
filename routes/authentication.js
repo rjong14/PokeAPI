@@ -44,12 +44,3 @@ module.exports = function(frontEndRouter, passport){
     
     return frontEndRouter;
 };
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    else{
-        res.redirect('/');
-    }
-};
