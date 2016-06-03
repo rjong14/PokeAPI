@@ -11,6 +11,13 @@ module.exports = function(frontEndRouter, passport){
         failureFlash : true
     }));
     
+    frontEndRouter.route('/signup')
+    .post(passport.authenticate('local-signup', {
+        successRedirect : '/',
+        failureRedirect : '/signup',
+        failureFlash : true
+    }));
+    
     frontEndRouter.route('/auth/facebook')
     .get(passport.authenticate('facebook', {
         scope : 'email' 

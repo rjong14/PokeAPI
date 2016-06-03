@@ -12,7 +12,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                     res[200](user);
                 })
         })
-        .post(function (req, res) {
+        .post(authorize.isAdmin, function (req, res) {
             var user = new User();
             if (!req.body.email)   {res[400]('no email given'); return;};
             if (!req.body.password){res[400]('no password given');return;};
