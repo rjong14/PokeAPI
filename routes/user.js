@@ -35,7 +35,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
 
     backEndRouter.route('/users/:id')
-        .get(function (req, res) {
+        .get(authorize.isAdminOrOwnRoute, function (req, res) {
             User.findById(req.params.id)
                 .populate('role')
                 .exec(function (err, user) {
@@ -43,7 +43,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                     res[200](user);
                 });
         })
-        .put(function (req, res) {
+        .put(authorize.isAdminOrOwnRoute, function (req, res) {
             var us = null;
             User.findById(req.params.id, function (err, user) {
                 if (err) { res[500](err); return;}
@@ -75,7 +75,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 })
             })
     })
-    .delete(function (req, res) {
+    .delete(authorize.isAdminOrOwnRoute, function (req, res) {
         User.remove({
                 _id: req.params.id
             }, function (err, user) {
@@ -88,17 +88,12 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
     
     backEndRouter.route('/profile')
-    //get logged in user
-    .get(function(req, res){
-        if(req.isAuthenticated()){
-            res[200](req.user);
-        } else {
-            res[400]('user not logged in')
-        }
+    .get(authorize.isAdminOrOwnRoute, function(req, res){
+        res[200](req.user);
     });
 
     backEndRouter.route('/users/:id/pokemon')
-        .get(function (req, res) {
+        .get(authorize.isAdminOrOwnRoute, function (req, res) {
         var options = {
             host: 'pokeapi.co',
             port: 80,
@@ -159,7 +154,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
 
     })
-    .post(function(req, res){
+    .post(authorize.isAdminOrOwnRoute, function(req, res){
         User.findById(req.params.id, function(err, user){
             if(err){res[500](err);return;}
             
@@ -173,7 +168,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
 
     backEndRouter.route('/users/:id/pokemon/:pokeid')
-        .delete(function (req, res) {
+        .delete(authorize.isAdminOrOwnRoute, function (req, res) {
             User.findById(req.params.id, function (err, user) {
                 if (err) {
                     res[500](err);
@@ -194,7 +189,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
     })
     
     backEndRouter.route('/users/:id/location')
-    .post(function(req, res){
+    .post(authorize.isAdminOrOwnRoute, function(req, res){
         if(!req.body.long){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
         Location
@@ -219,19 +214,6 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             })
         })
     })
-    
-    //backEndRouter.route('/users/role/:name')
-    //.get(function(req, res){
-    //    Role.findOne({'name': req.params.name}, function(err, role){
-    //        if(err){ res[500](err); return; }
-    //        if (!role) { res[400]('no valid role given'); return; };
-    //        User.find({'name': role._id}, function(err, users){ //help, find doesnt work
-    //            if(err){ res[500](err); return; }
-    //            if(!users) { res[400]('no users found'); return; };
-    //            res[200](users);
-    //        })
-    //    })
-    //})
 
     return backEndRouter;
 };

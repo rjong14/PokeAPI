@@ -1,6 +1,6 @@
-module.exports = function(backEndRouter, Role){
+module.exports = function(backEndRouter, Role, authorize){
     backEndRouter.route('/roles')
-    .get(function(req, res){
+    .get(authorize.isAdmin, function(req, res){
         Role.find(function(err, role){
             if (err){
                 res[500](err);
@@ -9,7 +9,7 @@ module.exports = function(backEndRouter, Role){
             res[200](role);
         })
     })
-    .post(function(req, res){
+    .post(authorize.isAdmin, function(req, res){
         var role = new Role;
         if (!req.body.name){
             res[400]('no name given');
@@ -25,9 +25,9 @@ module.exports = function(backEndRouter, Role){
         })
     });
     
-    backEndRouter.route('/roles/:id')
-    .put(function(req, res){
-        Role.findById(req.params.id), function(err, role){
+    backEndRouter.route('/roles/:roleId')
+    .put(authorize.isAdmin, function(req, res){
+        Role.findById(req.params.roleId), function(err, role){
             if (err){
                 res[500](err);
                 return;
@@ -46,8 +46,8 @@ module.exports = function(backEndRouter, Role){
             })
         }
     })
-    .delete(function(req, res){
-        Role.remove({_id: req.params.id}, function(err, role){
+    .delete(authorize.isAdmin, function(req, res){
+        Role.remove({_id: req.params.roleId}, function(err, role){
             if(err){
                 res[500](err);
             }
