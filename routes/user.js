@@ -8,13 +8,22 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
 //                    lol
 //                        .getAll()
 //                        .res();
+        var page = 1;
+        if (req.query.page > 0){
+            page = req.query.page;
+        }
+        var skip = page*10;
+        skip = skip-10;
+
             User.find()
+                .skip(skip)
+                .limit(10)
                 .exec(function (err, user) {
                     if (err) {
                         res[500](err);
                         return;
                     }
-                    res[200](user);
+                    res[200](user, 'ok');
                 })
         })
         .post(function (req, res) {
@@ -48,7 +57,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                         res[500](err);
                         return;
                     }
-                    res[201](user);
+                    res[201](user, 'created');
                 });
             });
         });
@@ -62,7 +71,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                         res[500](err);
                         return;
                     }
-                    res[200](user);
+                    res[200](user, 'ok');
                 });
         })
         .put(function (req, res) {
@@ -110,7 +119,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                     res[500](err);
                     return;
                 }
-                res[200](user);
+                res[200](user, 'deleted');
             });
         });
 
@@ -187,10 +196,15 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                 if(err){res[500](err);return;}
                 res[200](user);
             })
-        });
+        })
+    });
 
     backEndRouter.route('/users/:id/pokemon/:pokeid')
+    .get(function(req, res){
+        console.log('lol');
+    })
         .delete(function (req, res) {
+        console.log('lol');
             User.findById(req.params.id, function (err, user) {
                 if (err) {
                     res[500](err);
@@ -207,8 +221,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                     res[200](user);
                 })
             })
-        })
-    })
+        });
     
     backEndRouter.route('/users/:id/location')
     .post(function(req, res){
