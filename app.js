@@ -10,6 +10,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var session = require('express-session')
 var configDB = require('./config/database.js');
+var chalk = require('chalk');
 var async = require('async');
 require('json-response');
 var authorize = require('./modules/authorize');
@@ -106,7 +107,7 @@ app.use(function (err, req, res, next) {
 
 // start listen with socket.io
 app.io.on('connection', function(socket){
-  console.log('IMA CHRGN MA LZR');
+  console.log(chalk.red('IMA ') + chalk.green('CHRGN ') + chalk.magenta('MA LZR'));
 });
 
 module.exports = app;

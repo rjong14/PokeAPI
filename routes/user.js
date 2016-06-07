@@ -3,15 +3,24 @@ var http = require('http');
 module.exports = function (backEndRouter, User, Role, Location, async, authorize) {
     backEndRouter.route('/users')
         .get(authorize.isAdmin, function (req, res) {
-            User.find()
-                .exec(function (err, user) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
-                    res[200](user);
-                })
+        var page = 1;
+        if (req.query.page > 0){
+            page = req.query.page;
+        }
+        var skip = page*10;
+        skip = skip-10;
+        
+        User.find()
+            .skip(skip)
+            .limit(10)
+            .exec(function (err, user) {
+            if (err) {
+                res[500](err);
+                return;
+            }
+            res[200](user, 'ok');
         })
+    })
         .post(authorize.isAdmin, function (req, res) {
             var user = new User();
             if (!req.body.email)   {res[400]('no email given'); return;};
@@ -28,8 +37,8 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 user.role = role._id;
                 
                 user.save(function (err) {
-                    if (err)      {res[500](err);return;}
-                    res[201](user);
+                    if (err) {res[500](err);return;}
+                    res[201](user, 'created');
                 });
             });
         });
@@ -40,7 +49,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 .populate('role')
                 .exec(function (err, user) {
                     if (err) {res[500](err);return;}
-                    res[200](user);
+                    res[200](user, 'ok');
                 });
         })
         .put(authorize.isAdminOrOwnRoute, function (req, res) {
@@ -83,7 +92,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                     res[500](err);
                     return;
                 }
-                res[200](user);
+                res[200](user, 'deleted');
             });
         });
     
@@ -165,28 +174,28 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 if(err){res[500](err);return;}
                 res[200](user);
             })
-        });
+        })
+    });
 
     backEndRouter.route('/users/:id/pokemon/:pokeid')
         .delete(authorize.isAdminOrOwnRoute, function (req, res) {
-            User.findById(req.params.id, function (err, user) {
+        User.findById(req.params.id, function (err, user) {
+            if (err) {
+                res[500](err, 'error');
+                return;
+            }
+            user.pokemon.pull({
+                _id: req.params.pokeid
+            });
+            user.save(function (err) {
                 if (err) {
-                    res[500](err);
+                    res[500](err, 'error');
                     return;
                 }
-                user.pokemon.pull({
-                    _id: req.params.pokeid
-                });
-                user.save(function (err) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
-                    res[200](user);
-                })
+                res[200](user, 'deleted');
             })
         })
-    })
+    });
     
     backEndRouter.route('/users/:id/location')
     .post(authorize.isAdminOrOwnRoute, function(req, res){
@@ -208,7 +217,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 user.pokemon.push({pokeid : data[0].pokeid, caught_at: new Date()})
                 console.log('adding'+ data[0].pokeid)
                 user.save(function(err){
-                    if(err){res[500](err);return;}
+                    if(err){res[500](err, 'error');return;}
                     res[200](user);
                 })
             })
