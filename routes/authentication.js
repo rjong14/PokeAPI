@@ -11,6 +11,13 @@ module.exports = function(frontEndRouter, passport){
         failureFlash : true
     }));
     
+    frontEndRouter.route('/signup')
+    .post(passport.authenticate('local-signup', {
+        successRedirect : '/',
+        failureRedirect : '/signup',
+        failureFlash : true
+    }));
+    
     frontEndRouter.route('/auth/facebook')
     .get(passport.authenticate('facebook', {
         scope : 'email' 
@@ -35,15 +42,6 @@ module.exports = function(frontEndRouter, passport){
         failureRedirect : '/login'
     }));
     
-    frontEndRouter.route('/profile')
-    .get(function(req, res){
-        if(req.isAuthenticated()){
-            res[200](req.user);
-        } else {
-            res[400]('user not logged in')
-        }
-    });
-    
     //log out
     frontEndRouter.route('/logout')
     .post(function(req,res){
@@ -52,13 +50,4 @@ module.exports = function(frontEndRouter, passport){
     })
     
     return frontEndRouter;
-};
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    else{
-        res.redirect('/');
-    }
 };

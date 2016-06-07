@@ -1,12 +1,12 @@
-module.exports = function(backEndRouter, Location){
+module.exports = function(backEndRouter, Location, authorize){
     backEndRouter.route('/locations')
-    .get(function(req,res){
+    .get(authorize.isAdmin, function(req,res){
         Location.find(function(err, locations){
             if (err){res[500](err);return;}
             res[200](locations);
         })
     })
-    .post(function(req, res){
+    .post(authorize.isAdmin, function(req, res){
         var location = new Location;
         if(!req.body.startLong){res[500]('no startLong given');return;};
         if(!req.body.endLong){res[500]('no endLong given');return;};
@@ -24,16 +24,16 @@ module.exports = function(backEndRouter, Location){
         })
     });
     
-    backEndRouter.route('/locations/:id')
-    .get(function(req, res){
-        Location.findById(req.params.id, function(err, location){
+    backEndRouter.route('/locations/:locationId')
+    .get(authorize.isAdmin, function(req, res){
+        Location.findById(req.params.locationId, function(err, location){
             if(err){res[500](err);return;}
             res[200](location)
         })
     })
     
-    .put(function(req, res){
-        Location.findById(req.params.id, function(err, location){
+    .put(authorize.isAdmin, function(req, res){
+        Location.findById(req.params.locationId, function(err, location){
             if (err){res[500](err);return;}
             if(req.body.startLong){location.startLong = req.body.startLong};
             if(req.body.endLong){location.endLong = req.body.endLong};
@@ -47,8 +47,8 @@ module.exports = function(backEndRouter, Location){
         }
     )})
     
-    .delete(function(req, res){
-        Location.remove({_id: req.params.id}, function(err, location){
+    .delete(authorize.isAdmin, function(req, res){
+        Location.remove({_id: req.params.locationId}, function(err, location){
             if(err){res[500](err); return;}
             res[200](location);
         })

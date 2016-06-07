@@ -13,6 +13,7 @@ var configDB = require('./config/database.js');
 var chalk = require('chalk');
 var async = require('async');
 require('json-response');
+var authorize = require('./modules/authorize');
 
 //make app and router
 var backEndRouter = express.Router();
@@ -57,9 +58,9 @@ app.use(flash());
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Location, async);
 var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
-var roleRoutes = require('./routes/role')(backEndRouter, Role);
-var locationRoutes = require('./routes/location')(backEndRouter, Location);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async);                        
+var roleRoutes = require('./routes/role')(backEndRouter, Role, authorize);
+var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize);                        
                                           
 //load in routes
 app.use('/api', backEndRouter);

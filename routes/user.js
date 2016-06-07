@@ -1,118 +1,91 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async, UserRepo) {
+module.exports = function (backEndRouter, User, Role, Location, async, authorize) {
     backEndRouter.route('/users')
-        .get(function (req, res) {
-//                    console.log('get');
-//                    var lol = new UserRepo();
-//                    lol
-//                        .getAll()
-//                        .res();
+        .get(authorize.isAdmin, function (req, res) {
         var page = 1;
         if (req.query.page > 0){
             page = req.query.page;
         }
         var skip = page*10;
         skip = skip-10;
-
-            User.find()
-                .skip(skip)
-                .limit(10)
-                .exec(function (err, user) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
-                    res[200](user, 'ok');
-                })
+        
+        User.find()
+            .skip(skip)
+            .limit(10)
+            .exec(function (err, user) {
+            if (err) {
+                res[500](err);
+                return;
+            }
+            res[200](user, 'ok');
         })
-        .post(function (req, res) {
+    })
+        .post(authorize.isAdmin, function (req, res) {
             var user = new User();
-            if (!req.body.email) {
-                res[400]('no email given');
-                return;
-            };
-            if (!req.body.password) {
-                res[400]('no password given');
-                return;
-            };
-            if (!req.body.role) {
-                res[400]('no role given');
-                return;
-            };
+            if (!req.body.email)   {res[400]('no email given'); return;};
+            if (!req.body.password){res[400]('no password given');return;};
+            if (!req.body.role)    {res[400]('no role given');return;};
             Role.findOne({
                 name: req.body.role
             }, function (err, role) {
-                if (!role) {
-                    res[400]('no valid role given');
-                    return;
-                };
+                if (!role) {res[400]('no valid role given');return;};
 
                 var user = new User();
                 user.local.email = req.body.email;
                 user.local.password = user.generateHash(req.body.password);
                 user.role = role._id;
+                
                 user.save(function (err) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
+                    if (err) {res[500](err);return;}
                     res[201](user, 'created');
                 });
             });
         });
 
     backEndRouter.route('/users/:id')
-        .get(function (req, res) {
+        .get(authorize.isAdminOrOwnRoute, function (req, res) {
             User.findById(req.params.id)
                 .populate('role')
                 .exec(function (err, user) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
+                    if (err) {res[500](err);return;}
                     res[200](user, 'ok');
                 });
         })
-        .put(function (req, res) {
+        .put(authorize.isAdminOrOwnRoute, function (req, res) {
             var us = null;
             User.findById(req.params.id, function (err, user) {
-                if (err) {
-                    res[500](err);
-                    return;
-                }
+                if (err) { res[500](err); return;}
                 if (req.body.email) {
                     user.local.email = req.body.email;
                 };
                 if (req.body.password) {
                     user.local.password = user.generateHash(req.body.password);
-                };
-                if (req.body.role) {
-                    Role.findOne({
-                        name: req.body.role
-                    }, function (err, role) {
-                        if (!role) {
-                            res[400]('no valid role given');
-                            return;
-                        };
-                        user.role = role._id;
-                        us = user;
-                    })
-                };
-
-            }).exec(function (err, data) {
-                us.save(function (err) {
-                    console.log('2nd exec');
-                    if (err) {
-                        res[500](err);
-                        return;
+                };                
+                
+                async.parallel([
+                    function(callback){
+                        if (req.body.role) {
+                            Role.findOne({name: req.body.role}, function (err, role) {
+                                if (!role) {res[400]('no valid role given');return;};
+                                user.role = role._id;
+                                callback(null);
+                            })
+                        } else {
+                            callback(null);
+                        }
                     }
-                    res[200](data);
-                });
+                ],
+                function(err){
+                    user.save(function(err){
+                        if (err) { res[500](err);return;}
+                        res[200](user);
+                    })
+                })
             })
-        })
-        .delete(function (req, res) {
-            User.remove({
+    })
+    .delete(authorize.isAdminOrOwnRoute, function (req, res) {
+        User.remove({
                 _id: req.params.id
             }, function (err, user) {
                 if (err) {
@@ -122,9 +95,14 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                 res[200](user, 'deleted');
             });
         });
+    
+    backEndRouter.route('/profile')
+    .get(authorize.isAdminOrOwnRoute, function(req, res){
+        res[200](req.user);
+    });
 
     backEndRouter.route('/users/:id/pokemon')
-        .get(function (req, res) {
+        .get(authorize.isAdminOrOwnRoute, function (req, res) {
         var options = {
             host: 'pokeapi.co',
             port: 80,
@@ -185,7 +163,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
         });
 
     })
-    .post(function(req, res){
+    .post(authorize.isAdminOrOwnRoute, function(req, res){
         User.findById(req.params.id, function(err, user){
             if(err){res[500](err);return;}
             
@@ -200,31 +178,27 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
     });
 
     backEndRouter.route('/users/:id/pokemon/:pokeid')
-    .get(function(req, res){
-        console.log('lol');
-    })
-        .delete(function (req, res) {
-        console.log('lol');
-            User.findById(req.params.id, function (err, user) {
+        .delete(authorize.isAdminOrOwnRoute, function (req, res) {
+        User.findById(req.params.id, function (err, user) {
+            if (err) {
+                res[500](err, 'error');
+                return;
+            }
+            user.pokemon.pull({
+                _id: req.params.pokeid
+            });
+            user.save(function (err) {
                 if (err) {
-                    res[500](err);
+                    res[500](err, 'error');
                     return;
                 }
-                user.pokemon.pull({
-                    _id: req.params.pokeid
-                });
-                user.save(function (err) {
-                    if (err) {
-                        res[500](err);
-                        return;
-                    }
-                    res[200](user);
-                })
+                res[200](user, 'deleted');
             })
-        });
+        })
+    });
     
     backEndRouter.route('/users/:id/location')
-    .post(function(req, res){
+    .post(authorize.isAdminOrOwnRoute, function(req, res){
         if(!req.body.long){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
         Location
@@ -243,25 +217,12 @@ module.exports = function (backEndRouter, User, Role, Location, async, UserRepo)
                 user.pokemon.push({pokeid : data[0].pokeid, caught_at: new Date()})
                 console.log('adding'+ data[0].pokeid)
                 user.save(function(err){
-                    if(err){res[500](err);return;}
+                    if(err){res[500](err, 'error');return;}
                     res[200](user);
                 })
             })
         })
     })
-    
-    //backEndRouter.route('/users/role/:name')
-    //.get(function(req, res){
-    //    Role.findOne({'name': req.params.name}, function(err, role){
-    //        if(err){ res[500](err); return; }
-    //        if (!role) { res[400]('no valid role given'); return; };
-    //        User.find({'name': role._id}, function(err, users){ //help, find doesnt work
-    //            if(err){ res[500](err); return; }
-    //            if(!users) { res[400]('no users found'); return; };
-    //            res[200](users);
-    //        })
-    //    })
-    //})
 
     return backEndRouter;
 };
