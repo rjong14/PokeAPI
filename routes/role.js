@@ -27,7 +27,7 @@ module.exports = function(backEndRouter, Role, authorize){
     
     backEndRouter.route('/roles/:roleId')
     .put(authorize.isAdmin, function(req, res){
-        Role.findById(req.params.roleId), function(err, role){
+        Role.findById(req.params.roleId, function(err, role){
             if (err){
                 res[500](err);
                 return;
@@ -44,7 +44,7 @@ module.exports = function(backEndRouter, Role, authorize){
                 }
                 res[200](role);
             })
-        }
+        })
     })
     .delete(authorize.isAdmin, function(req, res){
         Role.remove({_id: req.params.roleId}, function(err, role){
