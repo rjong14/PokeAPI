@@ -32,6 +32,7 @@
   "devDependencies": {
     "chai": "^2.1.2",
     "mocha": "^2.2.1",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "superagent": "^2.0.0"
   }
 }

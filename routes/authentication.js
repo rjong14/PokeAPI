@@ -6,7 +6,7 @@ module.exports = function(frontEndRouter, passport){
     
     //local login
     .post(passport.authenticate('local-login', {
-        successRedirect : '/profile',
+        successRedirect : '/',
         failureRedirect : '/login',
         failureFlash : true
     }));

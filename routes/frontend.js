@@ -1,12 +1,13 @@
-module.exports = function (frontEndRouter, User, Role, Location, async) {
+module.exports = function (frontEndRouter, User, Role, Location, async, authorize, cookieParser) {
     frontEndRouter.route('/')
-        .get(function (req, res) {
+        .get(authorize.isLoggedInFrontend, function (req, res) {
+            console.log('Cookies: ', req.cookies);
             res.render('index', {
                 title: 'Home'
             });
         });
     frontEndRouter.route('/users')
-        .get(function (req, res) {
+        .get(authorize.isLoggedInFrontend, function (req, res) {
             var users = null;
             var roles = null;
 
