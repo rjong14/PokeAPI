@@ -51,7 +51,7 @@ module.exports = function(backEndRouter, Role, authorize){
             if(err){
                 res[500](err);
             }
-            res[200](role);
+            res[200](role, 'deleted');
         });
     });
     

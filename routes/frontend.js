@@ -1,7 +1,6 @@
-module.exports = function (frontEndRouter, User, Role, Location, async, authorize, cookieParser) {
+module.exports = function (frontEndRouter, User, Role, Location, async, authorize) {
     frontEndRouter.route('/')
         .get(authorize.isLoggedInFrontend, function (req, res) {
-            console.log('Cookies: ', req.cookies);
             res.render('index', {
                 title: 'Home'
             });

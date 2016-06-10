@@ -113,17 +113,17 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
 
         async.series({
             one: function(callback){
-                console.log('first');
+                //console.log('first');
                 User.findById(req.params.id)
                     .exec(function (err, user) {
                     if (err) {res[500](err);return;}
                     poke = user.pokemon;
-                    console.log('beginning');
+                    //console.log('beginning');
                     callback(null, 1);
                 });
             },
             two: function(callback){
-                console.log('second');
+                //console.log('second');
                 var newpoke = poke;
 
 
@@ -144,11 +144,11 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                         response.on('end', function () {
                             var json = JSON.parse(txt);
                             item.name = json.name;
-                            console.log(json.name);
+                            //console.log(json.name);
                         });
                     };
                     options.path = '/api/v2/pokemon/' + item.pokeid + '/';
-                    console.log(options.path);
+                    //console.log(options.path);
                     http.get(options, jsoncall);
                     eachcb();
                 }, function () {
@@ -158,7 +158,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 });
             }
         },function(err, results) {
-            console.log(results.two);
+            //console.log(results.two);
             res[200](results.two);
         });
 
