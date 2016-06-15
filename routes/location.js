@@ -50,7 +50,7 @@ module.exports = function(backEndRouter, Location, authorize){
     .delete(authorize.isAdmin, function(req, res){
         Location.remove({_id: req.params.locationId}, function(err, location){
             if(err){res[500](err); return;}
-            res[200](location);
+            res[200](location, 'deleted');
         })
     })
     

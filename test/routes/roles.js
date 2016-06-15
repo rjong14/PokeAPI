@@ -42,13 +42,13 @@ module.exports = (api) => {
                     })
                     .expect(200)
                     .end((err, res) => {
-//                        expect(res.body.data).to.not.be.undefined;
-//                        expect(res.body.data).to.have.property("name");
-//                        expect(res.body.data).to.have.property("_id");
+                        expect(res.body.data).to.not.be.undefined;
+                        expect(res.body.data).to.have.property("name");
+                        expect(res.body.data).to.have.property("_id");
                         done();
                     });
             });
-            it('should delete an user by id', (done) => { // he was an hero
+            it('should delete an role by id', (done) => { // he was an hero
                 api.delete('/api/roles/'+tempId)
                     .set('Accept', 'application/x-www-form-urlencoded')
                     .expect(200)
