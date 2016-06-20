@@ -11,6 +11,7 @@ var flash = require('connect-flash');
 var session = require('express-session')
 var configDB = require('./config/database.js');
 var chalk = require('chalk');
+var cors = require('cors');
 var async = require('async');
 require('json-response');
 var authorize = require('./modules/authorize');
@@ -38,6 +39,7 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
