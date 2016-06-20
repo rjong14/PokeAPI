@@ -60,6 +60,7 @@ app.use(flash());
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Location, async, authorize);
 var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
+var apiAuthenticationRoute = require('./routes/apiAuthentication')(backEndRouter, passport, authorize);
 var roleRoutes = require('./routes/role')(backEndRouter, Role, authorize);
 var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize);                        
