@@ -1,8 +1,10 @@
 module.exports = function (frontEndRouter, User, Role, Location, async, authorize) {
     frontEndRouter.route('/')
         .get(authorize.isLoggedInFrontend, function (req, res) {
+            console.log(res.user);
             res.render('index', {
-                title: 'Home'
+                title: 'Home',
+                user: req.user
             });
         });
     frontEndRouter.route('/users')
@@ -35,7 +37,8 @@ module.exports = function (frontEndRouter, User, Role, Location, async, authoriz
                 res.render('users', {
                     title: 'Users',
                     users: users,
-                    roles: roles
+                    roles: roles,
+                    user: req.user
                 })
             })
 
@@ -48,7 +51,8 @@ module.exports = function (frontEndRouter, User, Role, Location, async, authoriz
                 if (err){res[500](err);return;}
                 res.render('locations', {
                     title: 'Locations',
-                    locations: locations
+                    locations: locations,
+                    user: req.user
                 });
             })
 

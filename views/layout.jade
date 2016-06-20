@@ -30,17 +30,13 @@ html
             li.dropdown.pull-right
               a.dropdown-toggle(href='#', data-toggle='dropdown')
                 span.glyphicon.glyphicon-user
-                |  User
+                |  #{user.local.email}
                 span.caret
               ul.dropdown-menu(role='menu')
                 li
                   a(href='#')
                     span.glyphicon.glyphicon-user
                     |  Profile
-                li
-                  a(href='#')
-                    span.glyphicon.glyphicon-cog
-                    |  Settings
                 li
                   a(href='#')
                     span.glyphicon.glyphicon-log-out
