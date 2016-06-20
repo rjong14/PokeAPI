@@ -57,6 +57,7 @@ module.exports = function(passport, User, Role) {
         passReqToCallback : true
     },
     function(req, email, password, done) {
+        console.log("login attempted with email: "+email+" password: "+password)
         User.findOne({ 'local.email' :  email }, function(err, user) {
             if (err) { return done(err); }
             if (!user) { return done(null, false, req.flash('loginMessage', 'No user found.')); }
