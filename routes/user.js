@@ -95,11 +95,6 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 res[200](user, 'deleted');
             });
         });
-    
-    backEndRouter.route('/profile')
-    .get(authorize.isAdminOrOwnRoute, function(req, res){
-        res[200](req.user);
-    });
 
     backEndRouter.route('/users/:id/pokemon')
         .get(authorize.isAdminOrOwnRoute, function (req, res) {
