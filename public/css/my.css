@@ -43,3 +43,7 @@
     background-color: #EF5350;
     color: #FFF;
 }
+
+.panel-body {
+    overflow: auto;
+}
