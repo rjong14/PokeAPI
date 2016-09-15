@@ -19,6 +19,8 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 return;
             }
             res[200](user, 'ok');
+
+
         })
     })
         .post(authorize.isAdmin, function (req, res) {

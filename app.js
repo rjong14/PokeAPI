@@ -15,6 +15,7 @@ var cors = require('cors');
 var async = require('async');
 require('json-response');
 var authorize = require('./modules/authorize');
+const expressSession = require('express-session');
 
 //make app and router
 var backEndRouter = express.Router();
@@ -70,6 +71,38 @@ app.use('/api', backEndRouter);
 app.use('/', frontEndRouter);
 
 //Middleware
+app.use(function(req, res, next) {
+    var sessionId = req.param('sessionId');
+    // if there was a session id passed add it to the cookies
+    if (sessionId) {
+        var header = req.headers.cookie;
+        // sign the cookie so Express Session unsigns it correctly
+        var signedCookie = 's:' + cookieSignature.sign(sessionId, 'keyboard cat');
+        req.headers.cookie = cookie.serialize('connect.sid', signedCookie);
+    }
+    next();
+});
+
+app.use(function(req, res, next) {
+    expressSession({
+        'cookie': {
+            'httpOnly': false,
+            'maxAge': 1000 * 60 * 60 * 24 * 60,
+        },
+        'name': 'connect.sid',
+        'secret': 'keyboard cat',
+        'saveUninitialized': true,
+        'genid': function() {
+            var sessionId = req.param('sessionId');
+            if (sessionId) {
+                return req.param('sessionId');
+            }
+            return uuid;
+        }
+    })(req, res, next);
+});
+
+
 backEndRouter.get('/', function (req, res) {
     res.json({
         message: 'hooray! welcome to our api!!'

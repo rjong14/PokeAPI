@@ -1,18 +1,16 @@
 require('json-response');
-var Role = require('../models/Role');
+const Role = require('../models/Role');
 
 
 authorize = {
-isLoggedIn : function(req, res, next){
-    if(req.isAuthenticated()){
+isLoggedIn(req, res, next){
+    if(req.isAuthenticated())
         return next();
-    }
-    else{
+    else
         res[401]('', 'not logged in');
-    }
 },
 
-isLoggedInFrontend : function(req, res, next){
+isLoggedInFrontend(req, res, next){
     if(req.isAuthenticated()){
         Role.findById(req.user.role, function(err, role){
             if(err){res[500](err); return; }
@@ -29,7 +27,7 @@ isLoggedInFrontend : function(req, res, next){
     }
 },
 
-isAdmin : function(req, res, next){
+isAdmin(req, res, next){
     if(req.isAuthenticated()){
         Role.findById(req.user.role, function(err, role){
             if(err){res[500](err); return; }
@@ -46,7 +44,7 @@ isAdmin : function(req, res, next){
     }
 },
 
-isAdminOrOwnRoute : function(req, res, next){
+isAdminOrOwnRoute(req, res, next){
     if(req.isAuthenticated()){
         Role.findById(req.user.role, function(err, role){
             if(err){res[500](err); return; }
@@ -69,6 +67,3 @@ isAdminOrOwnRoute : function(req, res, next){
 }
 
 module.exports = authorize;
-//module.exports.isLoggedIn = isLoggedIn;
-//module.exports.isAdmin = isAdmin;
-//module.exports.isAdminOrOwnRoute = isAdminOrOwnRoute;
