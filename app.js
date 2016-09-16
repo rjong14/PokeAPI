@@ -15,7 +15,10 @@ var cors = require('cors');
 var async = require('async');
 require('json-response');
 var authorize = require('./modules/authorize');
+
 const expressSession = require('express-session');
+const cookie = require('cookie');
+const cookieSignature = require('cookie-signature');
 
 //make app and router
 var backEndRouter = express.Router();
@@ -91,6 +94,7 @@ app.use(function(req, res, next) {
         },
         'name': 'connect.sid',
         'secret': 'keyboard cat',
+        'resave': false,
         'saveUninitialized': true,
         'genid': function() {
             var sessionId = req.param('sessionId');
