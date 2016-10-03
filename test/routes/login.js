@@ -16,6 +16,15 @@ describe('Login', () => {
                 done();
             })
     });
+    it('get profile', (done) => {
+            api.get('/api/profile/')
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end((err, res) => {
+                    console.log(res.body.data);
+                    done();
+                })
+    });
 });
 
 };
