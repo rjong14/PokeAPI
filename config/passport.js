@@ -30,7 +30,7 @@ module.exports = function (passport, User, Role) {
                 if (err) {
                     done(err, false);
                 }
-                req.session.passport.user = User;
+                req.session.passport.user = user;
                 done(null, user);
             });
     }));
