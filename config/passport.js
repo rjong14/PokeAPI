@@ -31,6 +31,7 @@ module.exports = function (passport, User, Role) {
                     done(err, false);
                 }
                 req.isAuthenticated = function(){return true};
+                req.user = user;
                 done(null, user);
             });
     }));
