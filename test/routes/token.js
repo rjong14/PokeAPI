@@ -20,7 +20,7 @@ module.exports = (api) => {
                 })
         });
         it('should get profile', (done) => {
-            console.log(token);
+            //console.log(token);
             api.get('/api/profile/')
                 .set('Accept', 'application/json')
                 .set('token', token)

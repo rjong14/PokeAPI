@@ -6,9 +6,9 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
-let jwtconfig = require('./jwtconfig');
-let jwt = require("jwt-simple");
-let opts = {
+var jwtconfig = require('./jwtconfig');
+var jwt = require("jwt-simple");
+var opts = {
     jwtFromRequest: ExtractJwt.fromHeader('token'),
     secretOrKey: jwtconfig.jwtSecret
 };
@@ -53,6 +53,7 @@ module.exports = function (passport, User, Role) {
             passReqToCallback: true
         },
         function (req, email, password, done) {
+        console.log('jwt login');
             User.findOne({
                 'local.email': email
             }, function (err, user) {
