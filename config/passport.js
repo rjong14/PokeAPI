@@ -42,14 +42,7 @@ module.exports = function (passport, User, Role) {
             if(req.session.passport.user !== undefined){
                return done(null, user);
             } else{
-                done(err, false);        function (req, email, password, done) {
-            if(req.session.passport.user !== undefined){
-               return done(null, user);
-            } else{
                 done(err, false);
-            }
-
-        })
             }
 
         }));
