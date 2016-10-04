@@ -10,7 +10,8 @@ var jwtconfig = require('./jwtconfig');
 var jwt = require("jwt-simple");
 var opts = {
     jwtFromRequest: ExtractJwt.fromHeader('token'),
-    secretOrKey: jwtconfig.jwtSecret
+    secretOrKey: jwtconfig.jwtSecret,
+    passReqToCallback: true
 };
 
 // load the auth variables
@@ -20,7 +21,7 @@ var configAuth = require('./auth');
 module.exports = function (passport, User, Role) {
 
 
-    passport.use('jwt-auth', new JwtStrategy(opts, function (jwt_payload, done) {
+    passport.use('jwt-auth', new JwtStrategy(opts, function (req, jwt_payload, done) {
         console.log('jwtjwtjwt')
         console.log(jwt_payload);
         User.findById(jwt_payload.id)
@@ -29,6 +30,7 @@ module.exports = function (passport, User, Role) {
                 if (err) {
                     done(err, false);
                 }
+                req.session.passport.user = User;
                 done(null, user);
             });
     }));
