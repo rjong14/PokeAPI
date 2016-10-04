@@ -30,7 +30,7 @@ module.exports = function (passport, User, Role) {
                 if (err) {
                     done(err, false);
                 }
-                req.session.passport.user = user;
+                req.isAuthenticated = function(){return true};
                 done(null, user);
             });
     }));
