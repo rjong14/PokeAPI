@@ -15,7 +15,7 @@ module.exports = (api) => {
                 .expect(200)
                 .end((err, res) => {
                     token = res.body.data.token;
-                //console.log(token);
+                console.log(res.body.data);
                     done();
                 })
         });

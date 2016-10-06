@@ -5,10 +5,8 @@
 
 
   token
-toke:
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU3NWE5NmM1Yjg3OGZjNjAyNTgxZTBiMiJ9.5lf6PuRwHINUGvefhu3N6nl-Dx2Eh_yg1RAA7Ne9Roo
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjU3NWE5NmM1Yjg3OGZjNjAyNTgxZTBiMiJ9.5lf6PuRwHINUGvefhu3N6nl-Dx2Eh_yg1RAA7Ne9Roo
-[0mPOST /api/token [32m200 [0m644.282 ms - 41[0m
+jwt login
+[0mPOST /api/token [32m200 [0m360.618 ms - 41[0m
 Response {
   domain: null,
   _events: {},
@@ -119,7 +117,7 @@ Response {
         'content-length': '41',
         etag: 'W/"29-3CpTusoiq+SC9GnouAlf2Q"',
         'set-cookie': [Object],
-        date: 'Fri, 30 Sep 2016 13:31:34 GMT',
+        date: 'Thu, 06 Oct 2016 15:56:58 GMT',
         connection: 'close' },
      rawHeaders: 
       [ 'X-Powered-By',
@@ -133,9 +131,9 @@ Response {
         'ETag',
         'W/"29-3CpTusoiq+SC9GnouAlf2Q"',
         'set-cookie',
-        'connect.sid=s%3AuXw35FUQaVt7VSEoPbPYpaH8YmgKsi48.Pu3cPSu%2F8SOL0SHF9ohCKGVe4L%2F6H%2Bqfo%2FjzIFxh3DE; Path=/; HttpOnly',
+        'connect.sid=s%3AeAPnEX42nXGuZbFhXlwp_2IoPA6mIa_N.54RuBDq%2FtPj7SpxsOo8L%2Fd3vmT27mqHJ9SGUhNYEdJ0; Path=/; HttpOnly',
         'Date',
-        'Fri, 30 Sep 2016 13:31:34 GMT',
+        'Thu, 06 Oct 2016 15:56:58 GMT',
         'Connection',
         'close' ],
      trailers: {},
@@ -201,7 +199,7 @@ Response {
         _headerSent: true,
         socket: [Object],
         connection: [Object],
-        _header: 'POST /api/token HTTP/1.1\r\nHost: 127.0.0.1:55389\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: node-superagent/0.21.0\r\nAccept: application/x-www-form-urlencoded\r\nContent-Type: application/json\r\nContent-Length: 52\r\nConnection: close\r\n\r\n',
+        _header: 'POST /api/token HTTP/1.1\r\nHost: 127.0.0.1:32863\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: node-superagent/0.21.0\r\nAccept: application/x-www-form-urlencoded\r\nContent-Type: application/json\r\nContent-Length: 52\r\nConnection: close\r\n\r\n',
         _headers: [Object],
         _headerNames: [Object],
         _onPendingData: null,
@@ -226,7 +224,7 @@ Response {
      _agent: false,
      _formData: null,
      method: 'POST',
-     url: 'http://127.0.0.1:55389/api/token',
+     url: 'http://127.0.0.1:32863/api/token',
      header: {},
      writable: true,
      _redirects: 0,
@@ -279,7 +277,7 @@ Response {
         _headerSent: true,
         socket: [Object],
         connection: [Object],
-        _header: 'POST /api/token HTTP/1.1\r\nHost: 127.0.0.1:55389\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: node-superagent/0.21.0\r\nAccept: application/x-www-form-urlencoded\r\nContent-Type: application/json\r\nContent-Length: 52\r\nConnection: close\r\n\r\n',
+        _header: 'POST /api/token HTTP/1.1\r\nHost: 127.0.0.1:32863\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: node-superagent/0.21.0\r\nAccept: application/x-www-form-urlencoded\r\nContent-Type: application/json\r\nContent-Length: 52\r\nConnection: close\r\n\r\n',
         _headers: [Object],
         _headerNames: [Object],
         _onPendingData: null,
@@ -290,7 +288,7 @@ Response {
         parser: null,
         res: [Object] },
      protocol: 'http:',
-     host: '127.0.0.1:55389',
+     host: '127.0.0.1:32863',
      _data: { email: 'administrator', password: 'administrator' },
      _status: 200,
      _callback: [Function],
@@ -409,9 +407,9 @@ Response {
         _idleNext: null,
         _idlePrev: null,
         _idleTimeout: -1 },
-     _header: 'POST /api/token HTTP/1.1\r\nHost: 127.0.0.1:55389\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: node-superagent/0.21.0\r\nAccept: application/x-www-form-urlencoded\r\nContent-Type: application/json\r\nContent-Length: 52\r\nConnection: close\r\n\r\n',
+     _header: 'POST /api/token HTTP/1.1\r\nHost: 127.0.0.1:32863\r\nAccept-Encoding: gzip, deflate\r\nUser-Agent: node-superagent/0.21.0\r\nAccept: application/x-www-form-urlencoded\r\nContent-Type: application/json\r\nContent-Length: 52\r\nConnection: close\r\n\r\n',
      _headers: 
-      { host: '127.0.0.1:55389',
+      { host: '127.0.0.1:32863',
         'accept-encoding': 'gzip, deflate',
         'user-agent': 'node-superagent/0.21.0',
         accept: 'application/x-www-form-urlencoded',
@@ -486,8 +484,8 @@ Response {
      'content-type': 'application/json; charset=utf-8',
      'content-length': '41',
      etag: 'W/"29-3CpTusoiq+SC9GnouAlf2Q"',
-     'set-cookie': [ 'connect.sid=s%3AuXw35FUQaVt7VSEoPbPYpaH8YmgKsi48.Pu3cPSu%2F8SOL0SHF9ohCKGVe4L%2F6H%2Bqfo%2FjzIFxh3DE; Path=/; HttpOnly' ],
-     date: 'Fri, 30 Sep 2016 13:31:34 GMT',
+     'set-cookie': [ 'connect.sid=s%3AeAPnEX42nXGuZbFhXlwp_2IoPA6mIa_N.54RuBDq%2FtPj7SpxsOo8L%2Fd3vmT27mqHJ9SGUhNYEdJ0; Path=/; HttpOnly' ],
+     date: 'Thu, 06 Oct 2016 15:56:58 GMT',
      connection: 'close' },
   header: 
    { 'x-powered-by': 'Express',
@@ -495,8 +493,8 @@ Response {
      'content-type': 'application/json; charset=utf-8',
      'content-length': '41',
      etag: 'W/"29-3CpTusoiq+SC9GnouAlf2Q"',
-     'set-cookie': [ 'connect.sid=s%3AuXw35FUQaVt7VSEoPbPYpaH8YmgKsi48.Pu3cPSu%2F8SOL0SHF9ohCKGVe4L%2F6H%2Bqfo%2FjzIFxh3DE; Path=/; HttpOnly' ],
-     date: 'Fri, 30 Sep 2016 13:31:34 GMT',
+     'set-cookie': [ 'connect.sid=s%3AeAPnEX42nXGuZbFhXlwp_2IoPA6mIa_N.54RuBDq%2FtPj7SpxsOo8L%2Fd3vmT27mqHJ9SGUhNYEdJ0; Path=/; HttpOnly' ],
+     date: 'Thu, 06 Oct 2016 15:56:58 GMT',
      connection: 'close' },
   statusCode: 200,
   status: 200,
@@ -518,8 +516,27 @@ Response {
   type: 'application/json',
   setEncoding: [Function: bound ],
   redirects: [] }
-    ✓ should get token (693ms)
+    1) should get token
+do auth
+[0mGET /api/profile/ [32m200 [0m4.844 ms - 52[0m
+    ✓ should get profile
 
 
-  1 passing (705ms)
+  1 passing (432ms)
+  1 failing
+
+  1) token should get token:
+     Uncaught TypeError: Cannot read property 'token' of null
+      at Test.api.post.set.send.expect.end (test/routes/token.js:18:42)
+      at Test.assert (node_modules/supertest/lib/test.js:221:6)
+      at assert (node_modules/supertest/lib/test.js:132:12)
+      at node_modules/supertest/lib/test.js:129:5
+      at Test.Request.callback (node_modules/supertest/node_modules/superagent/lib/node/index.js:746:30)
+      at Test.<anonymous> (node_modules/supertest/node_modules/superagent/lib/node/index.js:135:10)
+      at IncomingMessage.<anonymous> (node_modules/supertest/node_modules/superagent/lib/node/index.js:938:12)
+      at endReadableNT (_stream_readable.js:926:12)
+      at _combinedTickCallback (internal/process/next_tick.js:74:11)
+      at process._tickCallback (internal/process/next_tick.js:98:9)
+
+
 

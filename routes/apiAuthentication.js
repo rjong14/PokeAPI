@@ -9,7 +9,6 @@ module.exports = function (backEndRouter, passport, authorize) {
 
     backEndRouter.route('/token')
         .post(passport.authenticate('jwt-login'), function (req, res) {
-            res.token = req.token;
             res[200](req.token);
         });
 
