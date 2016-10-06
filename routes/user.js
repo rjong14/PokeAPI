@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async, authorize) {
+module.exports = function (backEndRouter, User, Role, Location, async, authorize, passport) {
     backEndRouter.route('/users')
         .get(authorize.isAdmin, function (req, res) {
         var page = 1;
