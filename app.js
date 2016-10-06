@@ -64,7 +64,7 @@ var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Loc
 var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
 var apiAuthenticationRoute = require('./routes/apiAuthentication')(backEndRouter, passport, authorize);
 var roleRoutes = require('./routes/role')(backEndRouter, Role, authorize);
-var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize);
+var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize, passport);
 var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize);                        
                                           
 //load in routes

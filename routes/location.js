@@ -1,6 +1,14 @@
-module.exports = function(backEndRouter, Location, authorize){
+module.exports = function(backEndRouter, Location, authorize, passport){
     backEndRouter.route('/locations')
-    .get(authorize.isAdmin, function(req,res){
+    .get(function (req, res, next) {
+        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
+            if (err) {
+                res[500]
+            } else {
+                next();
+            }
+        })(req, res, next);
+    },authorize.isAdmin, function(req,res){
         Location.find(function(err, locations){
             if (err){res[500](err);return;}
             res[200](locations);
@@ -25,7 +33,15 @@ module.exports = function(backEndRouter, Location, authorize){
     });
     
     backEndRouter.route('/locations/:locationId')
-    .get(authorize.isAdmin, function(req, res){
+    .get(function (req, res, next) {
+        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
+            if (err) {
+                res[500]
+            } else {
+                next();
+            }
+        })(req, res, next);
+    }, authorize.isAdmin, function(req, res){
         Location.findById(req.params.locationId, function(err, location){
             if(err){res[500](err);return;}
             res[200](location)

@@ -195,7 +195,15 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
     });
     
     backEndRouter.route('/users/:id/location')
-    .post(authorize.isAdminOrOwnRoute, function(req, res){
+    .post(function (req, res, next) {
+        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
+            if (err) {
+                res[500]
+            } else {
+                next();
+            }
+        })(req, res, next);
+    },authorize.isAdminOrOwnRoute, function(req, res){
         if(!req.body.long){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
         Location
