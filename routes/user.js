@@ -99,7 +99,15 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
 
     backEndRouter.route('/users/:id/pokemon')
-        .get(authorize.isAdminOrOwnRoute, function (req, res) {
+        .get(function (req, res, next) {
+        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
+            if (err) {
+                res[500]
+            } else {
+                next();
+            }
+        })(req, res, next);
+    },authorize.isAdminOrOwnRoute, function (req, res) {
         var options = {
             host: 'pokeapi.co',
             port: 80,
