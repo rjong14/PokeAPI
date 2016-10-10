@@ -15,16 +15,15 @@ module.exports = function(backEndRouter, Location, authorize, passport){
         })
     })
     .post(authorize.isAdmin, function(req, res){
+                console.log('lol')
+        console.log(req.body.lng)
+        console.log(req.body.lat)
         var location = new Location;
-        if(!req.body.startLong){res[500]('no startLong given');return;};
-        if(!req.body.endLong){res[500]('no endLong given');return;};
-        if(!req.body.startLat){res[500]('no startLat given');return;};
-        if(!req.body.endLat){res[500]('no endLat given');return;};
+        if(!req.body.lng){res[500]('no lng given');return;};
+        if(!req.body.lat){res[500]('no lat given');return;};
         if(!req.body.pokeid){res[500]('no pokeid given');return;};
-        location.startLong = req.body.startLong;
-        location.endLong = req.body.endLong;
-        location.startLat = req.body.startLat;
-        location.endLat = req.body.endLat;
+        location.latlng.lng = req.body.lng;
+        location.latlng.lat = req.body.lat;
         location.pokeid = req.body.pokeid;
         location.save(function(err){
             if (err){ res[500](err); return; }
@@ -51,10 +50,8 @@ module.exports = function(backEndRouter, Location, authorize, passport){
     .put(authorize.isAdmin, function(req, res){
         Location.findById(req.params.locationId, function(err, location){
             if (err){res[500](err);return;}
-            if(req.body.startLong){location.startLong = req.body.startLong};
-            if(req.body.endLong){location.endLong = req.body.endLong};
-            if(req.body.startLat){location.startLat = req.body.startLat};
-            if(req.body.endLat){location.endLat = req.body.endLat};
+            if(req.body.lng){location.latlng.lng = req.body.lng};
+            if(req.body.lat){location.latlng.lat = req.body.lat};
             if(req.body.pokeid){location.pokeid = req.body.pokeid};
             location.save(function(err){
                 if(err){res[500](err);return;}

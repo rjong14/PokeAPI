@@ -52,10 +52,8 @@ module.exports = (api) => {
                     .set('Accept', 'application/x-www-form-urlencoded')
                     .send({
                         "pokeid": 151,
-                        "endLat": 5.29292,
-			            "startLat": 5.284993,
-			            "endLong": 51.691451,
-			            "startLong": 51.684448
+			            "Lat": 5.284993,
+			            "Lng": 51.684448
                     })
                     .expect(200)
                     .end((err, res) => {

@@ -6,7 +6,7 @@
 // Create SuperAgent
 const api = require('./modules/agent');
 
-const token = require('./routes/token')(api);
+//const token = require('./routes/token')(api);
 
 
 //// Login Agent

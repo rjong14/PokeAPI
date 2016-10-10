@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async, authorize, passport) {
+module.exports = function (backEndRouter, User, Role, Location, async, authorize, passport, geometry) {
     backEndRouter.route('/users')
         .get(authorize.isAdmin, function (req, res) {
         var page = 1;
@@ -212,13 +212,10 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             }
         })(req, res, next);
     },authorize.isAdminOrOwnRoute, function(req, res){
-        if(!req.body.long){res[500]('no long given');return;};
+        if(!req.body.lng){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
         Location
-        .where('startLong').lte(req.body.long)
-        .where('endLong').gte(req.body.long)
-        .where('startLat').lte(req.body.lat)
-        .where('endLat').gte(req.body.lat)
+        .where('latlng').within({ center: [req.body.lat,req.body.lng], radius: 10, unique: true, spherical: true })
         .lean()
         .exec(function(err, data){
             if(err){res[500](err);return;}

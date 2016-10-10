@@ -16,6 +16,7 @@ var cors = require('cors');
 var async = require('async');
 require('json-response');
 var authorize = require('./modules/authorize');
+var geometry = require('./modules/geometry');
 
 
 //make app and router
@@ -65,7 +66,7 @@ var authenticationRoute = require('./routes/authentication')(frontEndRouter, pas
 var apiAuthenticationRoute = require('./routes/apiAuthentication')(backEndRouter, passport, authorize);
 var roleRoutes = require('./routes/role')(backEndRouter, Role, authorize);
 var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize, passport);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize, passport);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize, passport, geometry);
                                           
 //load in routes
 app.use('/api', backEndRouter);
