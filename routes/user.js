@@ -214,12 +214,19 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
     },authorize.isAdminOrOwnRoute, function(req, res){
         if(!req.body.lng){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
+        console.log('time to catch!');
+        var area = { center: [parseInt(req.body.lat), parseInt(req.body.lat)], radius: 0.0001, unique: true, spherical: true };
         Location
-        .where('latlng').within({ center: [req.body.lat,req.body.lng], radius: 10, unique: true, spherical: true })
+        .where('latlng')
+        .within()
+        .circle(area)
         .lean()
         .exec(function(err, data){
+            console.log('in the exec');
+            console.log(data);
+            console.log(err);
             if(err){res[500](err);return;}
-            if(!data){res[400]('no data found');return;}
+            if(!data[0]){res[400]('no data found');return;}
             console.log(data[0].pokeid);
             
             User.findById(req.params.id, function(err, user){
