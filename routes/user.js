@@ -212,15 +212,16 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             }
         })(req, res, next);
     },authorize.isAdminOrOwnRoute, function(req, res){
-        if(!req.body.lng){res[500]('no long given');return;};
-        if(!req.body.lat){res[500]('no lat given');return;};
+        if(!req.body.latlng.lng){res[500]('no long given');return;};
+        if(!req.body.latlng.lat){res[500]('no lat given');return;};
         console.log('time to catch!');
-        console.log('[ '+parseFloat(req.body.lat)+', '+parseFloat(req.body.lat)+' ]')
-        var area = { center: [parseFloat(req.body.lat), parseFloat(req.body.lng)], radius: 0.00001, unique: true, spherical: true };
+        console.log('[ '+parseFloat(req.body.latlng.lat)+', '+parseFloat(req.body.latlng.lat)+' ]')
+        var area = { center: [parseFloat(req.body.latlng.lat), parseFloat(req.body.latlng.lng)], radius: 0.00001, unique: true, spherical: true };
         Location
         .where('latlng')
         .within()
         .circle(area)
+        .findById(req.body.id)
         .lean()
         .exec(function(err, data){
             console.log('in the exec');
