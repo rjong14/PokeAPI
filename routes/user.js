@@ -215,8 +215,8 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         if(!req.body.lng){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
         console.log('time to catch!');
-        console.log('[ '+parseInt(req.body.lat)+', '+parseInt(req.body.lat)+' ]')
-        var area = { center: [parseInt(req.body.lat), parseInt(req.body.lat)], radius: 0.0011, unique: true, spherical: true };
+        console.log('[ '+req.body.lat+', '+req.body.lat+' ]')
+        var area = { center: [req.body.lat, req.body.lng], radius: 0.0001, unique: true, spherical: true };
         Location
         .where('latlng')
         .within()
