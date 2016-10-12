@@ -221,7 +221,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         .where('latlng')
         .within()
         .circle(area)
-        .findById(req.body.id)
+        .where({id:req.body.id})
         .lean()
         .exec(function(err, data){
             console.log('in the exec');
