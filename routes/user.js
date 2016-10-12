@@ -229,12 +229,12 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             console.log(err);
             if(err){res[500](err);return;}
             if(!data[0]){res[400]('no data found');return;}
-            console.log(data[s].pokeid);
+            console.log(data[0].pokeid);
             
             User.findById(req.params.id, function(err, user){
                 var test = user.toObject();
-                user.pokemon.push({pokeid : data[s].pokeid, caught_at: new Date()})
-                console.log('adding'+ data[s].pokeid)
+                user.pokemon.push({pokeid : data[0].pokeid, caught_at: new Date()})
+                console.log('adding'+ data[0].pokeid)
                 user.save(function(err){
                     if(err){res[500](err, 'error');return;}
                     res[200](user);
