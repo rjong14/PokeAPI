@@ -231,6 +231,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             if(!data[0]){res[400]('no data found');return;}
             for (var s in data) {
                 if(data[s].id = req.body.id){
+                console.log('data id: '+data[s].id+' - body id: '+req.body.id);
             console.log(data[s].pokeid);
             
             User.findById(req.params.id, function(err, user){
