@@ -212,6 +212,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             }
         })(req, res, next);
     },authorize.isAdminOrOwnRoute, function(req, res){
+        console.log(req.body)
         if(!req.body.latlng.lng){res[500]('no long given');return;};
         if(!req.body.latlng.lat){res[500]('no lat given');return;};
         console.log('time to catch!');
