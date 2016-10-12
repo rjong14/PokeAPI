@@ -222,6 +222,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         .where('latlng')
         .within()
         .circle(area)
+        .where('id', req.body.id)
         .lean()
         .exec(function(err, data){
             console.log('in the exec');
@@ -229,9 +230,6 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             console.log(err);
             if(err){res[500](err);return;}
             if(!data[0]){res[400]('no data found');return;}
-            for (var s in data) {
-                if(data[s].id = req.body.id){
-                console.log('data id: '+data[s].id+' - body id: '+req.body.id);
             console.log(data[s].pokeid);
             
             User.findById(req.params.id, function(err, user){
@@ -243,8 +241,6 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                     res[200](user);
                 })
             })
-        }
-        }
         })
     })
 
