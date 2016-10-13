@@ -220,7 +220,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         console.log('[ '+parseFloat(req.body.lat)+', '+parseFloat(req.body.lat)+' ]')
         var area = { center: [parseFloat(req.body.lat), parseFloat(req.body.lng)], radius: 0.00001, unique: true, spherical: true };
         Location
-        .where({id: req.body.id})
+        .where({_id: req.body.id})
         .where('latlng')
         .within()
         .circle(area)
