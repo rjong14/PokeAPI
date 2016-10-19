@@ -75,7 +75,7 @@ module.exports = function (passport, User, Role) {
                 var token = jwt.encode(payload, jwtconfig.jwtSecret);
                 req.token = {
                     token: token,
-                    id: user.id
+                    user: user
                 };
                 return done(null, user);
             });
