@@ -239,7 +239,8 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 console.log('adding'+ data[0].pokeid)
                 user.save(function(err){
                     if(err){res[500](err, 'error');return;}
-                    res[200](user);
+                    var newres = {pokeid : data[0].pokeid};
+                    res[200](newres);
                 })
             })
         })
