@@ -118,7 +118,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
 
         async.series({
             one: function(callback){
-                //console.log('first');
+                console.log('first');
                 User.findById(req.params.id)
                     .exec(function (err, user) {
                     if (err) {res[500](err);return;}
@@ -128,39 +128,37 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 });
             },
             two: function(callback){
-                //console.log('second');
+                console.log('second');
                 var newpoke = poke;
 
 
                 async.eachSeries(newpoke, function (item, eachcb) {
-                    jsoncall = function (response) {
+                    jsoncall = function (res) {
                         var txt = '';
-
-                    //another chunk of data has been recieved, so append it to `txt`
-                        response.on('data', function (chunk) {
+                        res.on('data', function (chunk) {
+                            console.log('fired a chunk');
                             txt += chunk;
                         });
-
-                        response.on('error', function (e) {
-                            console.log("Got error: " + e.message);
-                        });
-
-                        //the whole response has been recieved, so we just print it out here
-                        response.on('end', function () {
+                        res.on('end', function () {
                             var json = JSON.parse(txt);
                             item.name = json.name;
+                            console.log('end');
+                            console.log(eachcb);
+                            eachcb();
                             //console.log(json.name);
                         });
                     };
                     options.path = '/api/v2/pokemon/' + item.pokeid + '/';
                     //console.log(options.path);
-                    http.get(options, jsoncall);
-                    eachcb();
-                }, function () {
-                    setTimeout(function(){
+                    http.get(options, jsoncall)
+                        .on('error', function (e) {
+                            console.log("Got error: " + e.message);
+                            eachcb();
+                        });
+
+                }, function(){
                     callback(null, newpoke);
-                    }, 5000);
-                });
+                } );
             }
         },function(err, results) {
             //console.log(results.two);

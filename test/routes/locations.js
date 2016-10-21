@@ -12,7 +12,7 @@ module.exports = (api) => {
                     .expect(200)
                     .end((err,res) => {
                         expect(res.body.data).to.not.be.undefined;
-                        expect(res.body.data[0]).to.have.property("startLat");
+                        expect(res.body.data[0]).to.have.property("latlng");
                         expect(res.body.data[0]).to.have.property("pokeid");
                         done();
                     })
@@ -24,10 +24,8 @@ module.exports = (api) => {
                     .set('Accept', 'application/x-www-form-urlencoded')
                     .send({
                         "pokeid": 150,
-			            "endLat": 5.29292,
-			            "startLat": 5.284993,
-			            "endLong": 51.691451,
-			            "startLong": 51.684448
+			            "lat": 5.284993,
+			            "lng": 51.684448
                     })
                     .expect(200)
                     .end((err,res) => {
@@ -52,8 +50,8 @@ module.exports = (api) => {
                     .set('Accept', 'application/x-www-form-urlencoded')
                     .send({
                         "pokeid": 151,
-			            "Lat": 5.284993,
-			            "Lng": 51.684448
+			            "lat": 5.284993,
+			            "lng": 51.684448
                     })
                     .expect(200)
                     .end((err, res) => {
@@ -62,9 +60,6 @@ module.exports = (api) => {
                         done();
                     });
             });
-
-
-
 
             it('should delete an location by id', (done) => { // he was an hero
                 api.delete('/api/locations/'+tempId)

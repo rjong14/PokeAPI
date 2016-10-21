@@ -30,21 +30,23 @@ module.exports = function (passport, User, Role) {
                 if (err) {
                     done(err, false);
                 }
-                req.isAuthenticated = function(){return true};
+                req.isAuthenticated = function () {
+                    return true
+                };
                 req.user = user;
                 done(null, user);
             });
     }));
-    
-        passport.use('auth', new LocalStrategy({
+
+    passport.use('auth', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password',
             passReqToCallback: true
         },
         function (req, email, password, done) {
-            if(req.session.passport.user !== undefined){
-               return done(null, user);
-            } else{
+            if (req.session.passport.user !== undefined) {
+                return done(null, user);
+            } else {
                 done(err, false);
             }
 
@@ -56,7 +58,7 @@ module.exports = function (passport, User, Role) {
             passReqToCallback: true
         },
         function (req, email, password, done) {
-        console.log('jwt login');
+            console.log('jwt login');
             User.findOne({
                 'local.email': email
             }, function (err, user) {
@@ -80,8 +82,6 @@ module.exports = function (passport, User, Role) {
                 return done(null, user);
             });
         }));
-
-
 
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
@@ -241,5 +241,4 @@ module.exports = function (passport, User, Role) {
             });
 
         }));
-
 };

@@ -8,8 +8,8 @@ describe('Login', () => {
         api.post('/login')
             .set('Accept', 'application/x-www-form-urlencoded')
             .send({
-                email: "administrator",
-                password: "administrator"
+                email: "testadmin",
+                password: "testadmin"
             })
             .expect(200)
             .end((err, res) => {
