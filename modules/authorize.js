@@ -47,7 +47,6 @@ isAdmin(req, res, next){
 },
 
 isAdminOrOwnRoute(req, res, next){
-    console.log('do auth');
     if(req.isAuthenticated()){
         Role.findById(req.user.role, function(err, role){
             if(err){res[500](err); return; }
@@ -57,7 +56,6 @@ isAdminOrOwnRoute(req, res, next){
                 if (req.params.id == req.user._id){
                     return next()
                 } else {
-                    console.log('notadminorownroute');
                     res[401]('', 'unauthorized, admin rights are needed for this route');
                     return;
                 }

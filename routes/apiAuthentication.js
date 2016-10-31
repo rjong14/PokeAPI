@@ -1,4 +1,4 @@
-module.exports = function (backEndRouter, passport, authorize) {
+module.exports = function (backEndRouter, passport, authorize, authenticate) {
     backEndRouter.route('/login')
         //local login
         .post(passport.authenticate('local-login', {
@@ -9,8 +9,11 @@ module.exports = function (backEndRouter, passport, authorize) {
 
     backEndRouter.route('/token')
         .post(passport.authenticate('jwt-login'), function (req, res) {
-            //res[200](req.token);
-            res.json(req.token)
+            if(req.headers['isandroid']){
+                res.json(req.token);
+            }else {
+                res[200](req.token);
+            }
         });
 
     //log out
@@ -20,15 +23,7 @@ module.exports = function (backEndRouter, passport, authorize) {
             res.redirect('/api/profile');
         });
 
-    backEndRouter.get('/profile', function (req, res, next) {
-        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
-            if (err) {
-                res[500]
-            } else {
-                next();
-            }
-        })(req, res, next);
-    }, authorize.isAdminOrOwnRoute, function (req, res) {
+    backEndRouter.get('/profile', authenticate.duoAuth, authorize.isAdminOrOwnRoute, function (req, res) {
         res[200](req.user);
     });
 

@@ -1,23 +1,12 @@
-module.exports = function(backEndRouter, Location, authorize, passport){
+module.exports = function(backEndRouter, Location, authorize, authenticate){
     backEndRouter.route('/locations')
-    .get(function (req, res, next) {
-        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
-            if (err) {
-                res[500]
-            } else {
-                next();
-            }
-        })(req, res, next);
-    },authorize.isAdmin, function(req,res){
+    .get(authenticate.duoAuth,authorize.isAdmin, function(req,res){
         Location.find(function(err, locations){
             if (err){res[500](err);return;}
             res[200](locations);
         })
     })
     .post(authorize.isAdmin, function(req, res){
-                console.log('lol')
-        console.log(req.body.lng)
-        console.log(req.body.lat)
         var location = new Location;
         if(!req.body.lat){res[500]('no lat given');return;};
         if(!req.body.lng){res[500]('no lng given');return;};
@@ -32,15 +21,7 @@ module.exports = function(backEndRouter, Location, authorize, passport){
     });
     
     backEndRouter.route('/locations/:locationId')
-    .get(function (req, res, next) {
-        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
-            if (err) {
-                res[500]
-            } else {
-                next();
-            }
-        })(req, res, next);
-    }, authorize.isAdmin, function(req, res){
+    .get(authenticate.duoAuth, authorize.isAdmin, function(req, res){
         Location.findById(req.params.locationId, function(err, location){
             if(err){res[500](err);return;}
             res[200](location)

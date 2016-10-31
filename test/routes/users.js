@@ -98,7 +98,6 @@ module.exports = (api) => {
                     .set('Accept', 'application/x-www-form-urlencoded')
                     .expect(200)
                     .end((err, res) => {
-                    console.log(res.body.data[0]);
                         expect(res.body.data[0]).to.have.property("pokeid");
                         expect(res.body.data[0]).to.have.property("caught_at");
                         expect(res.body.data[0]).to.have.property("name");

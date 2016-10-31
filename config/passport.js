@@ -22,8 +22,6 @@ module.exports = function (passport, User, Role) {
 
 
     passport.use('jwt-auth', new JwtStrategy(opts, function (req, jwt_payload, done) {
-        console.log('jwtjwtjwt')
-        console.log(jwt_payload);
         User.findById(jwt_payload.id)
             .populate('role')
             .exec(function (err, user) {
@@ -58,7 +56,6 @@ module.exports = function (passport, User, Role) {
             passReqToCallback: true
         },
         function (req, email, password, done) {
-            console.log('jwt login');
             User.findOne({
                 'local.email': email
             }, function (err, user) {

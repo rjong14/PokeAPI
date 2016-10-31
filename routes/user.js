@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async, authorize, passport, geometry) {
+module.exports = function (backEndRouter, User, Role, Location, async, authorize, authenticate) {
     backEndRouter.route('/users')
         .get(authorize.isAdmin, function (req, res) {
         var page = 1;
@@ -18,8 +18,11 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 res[500](err);
                 return;
             }
-            res[200](user, 'ok');
-
+            if(req.headers['isandroid']){
+                res.json(user);
+            }else {
+                res[200](user, 'ok');
+            }
 
         })
     })
@@ -51,7 +54,11 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 .populate('role')
                 .exec(function (err, user) {
                     if (err) {res[500](err);return;}
-                    res[200](user, 'ok');
+                    if(req.headers['isandroid']){
+                        res.json(user);
+                    }else {
+                        res[200](user, 'ok');
+                    }
                 });
         })
         .put(authorize.isAdminOrOwnRoute, function (req, res) {
@@ -99,15 +106,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
 
     backEndRouter.route('/users/:id/pokemon')
-        .get(function (req, res, next) {
-        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
-            if (err) {
-                res[500]
-            } else {
-                next();
-            }
-        })(req, res, next);
-    },authorize.isAdminOrOwnRoute, function (req, res) {
+        .get(authenticate.duoAuth,authorize.isAdminOrOwnRoute, function (req, res) {
         var options = {
             host: 'pokeapi.co',
             port: 80,
@@ -118,41 +117,30 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
 
         async.series({
             one: function(callback){
-                console.log('first');
                 User.findById(req.params.id)
                     .exec(function (err, user) {
                     if (err) {res[500](err);return;}
                     poke = user.pokemon;
-                    //console.log('beginning');
                     callback(null, 1);
                 });
             },
             two: function(callback){
-                console.log('second');
                 var newpoke = poke;
-
-
                 async.eachSeries(newpoke, function (item, eachcb) {
                     jsoncall = function (res) {
                         var txt = '';
                         res.on('data', function (chunk) {
-                            console.log('fired a chunk');
                             txt += chunk;
                         });
                         res.on('end', function () {
                             var json = JSON.parse(txt);
                             item.name = json.name;
-                            console.log('end');
-                            console.log(eachcb);
                             eachcb();
-                            //console.log(json.name);
                         });
                     };
                     options.path = '/api/v2/pokemon/' + item.pokeid + '/';
-                    //console.log(options.path);
                     http.get(options, jsoncall)
                         .on('error', function (e) {
-                            console.log("Got error: " + e.message);
                             eachcb();
                         });
 
@@ -161,7 +149,6 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 } );
             }
         },function(err, results) {
-            //console.log(results.two);
             res[200](results.two);
         });
 
@@ -171,7 +158,6 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             if(err){res[500](err);return;}
             
             if (!req.body.pokeid){res[400]('no pokeid given'); return;};
-            console.log(req.body.pokeId);
             user.pokemon.push({pokeid : req.body.pokeid, caught_at: new Date()})
             user.save(function(err){
                 if(err){res[500](err);return;}
@@ -201,21 +187,9 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
     });
     
     backEndRouter.route('/users/:id/location')
-    .post(function (req, res, next) {
-        passport.authenticate(['auth', 'jwt-auth'], function (err, user, info) {
-            if (err) {
-                res[500]
-            } else {
-                next();
-            }
-        })(req, res, next);
-    },authorize.isAdminOrOwnRoute, function(req, res){
-        console.log(req.body)
+    .post(authenticate.duoAuth,authorize.isAdminOrOwnRoute, function(req, res){
         if(!req.body.lng){res[500]('no long given');return;};
         if(!req.body.lat){res[500]('no lat given');return;};
-        console.log('time to catch!');
-        console.log(req.body.id)
-        console.log('[ '+parseFloat(req.body.lat)+', '+parseFloat(req.body.lat)+' ]')
         var area = { center: [parseFloat(req.body.lat), parseFloat(req.body.lng)], radius: 0.00001, unique: true, spherical: true };
         Location
         .where({_id: req.body.id})
@@ -224,17 +198,12 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         .circle(area)
         .lean()
         .exec(function(err, data){
-            console.log('in the exec');
-            console.log(data);
-            console.log(err);
             if(err){res[500](err);return;}
             if(!data[0]){res[400]('no data found');return;}
-            console.log(data[0].pokeid);
             
             User.findById(req.params.id, function(err, user){
                 var test = user.toObject();
                 user.pokemon.push({pokeid : data[0].pokeid, caught_at: new Date()})
-                console.log('adding'+ data[0].pokeid)
                 user.save(function(err){
                     if(err){res[500](err, 'error');return;}
                     var newres = {pokeid : data[0].pokeid};

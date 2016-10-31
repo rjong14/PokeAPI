@@ -16,6 +16,7 @@ var cors = require('cors');
 var async = require('async');
 require('json-response');
 var authorize = require('./modules/authorize');
+var authenticate = require('./modules/authenticate');
 var geometry = require('./modules/geometry');
 
 
@@ -41,7 +42,10 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+
+if (process.env.NODE_ENV !== 'test') {
+  app.use(logger('dev'));
+}
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -63,10 +67,10 @@ app.use(flash());
 //declare routes
 var frontendRoute = require('./routes/frontend')(frontEndRouter, User, Role, Location, async, authorize);
 var authenticationRoute = require('./routes/authentication')(frontEndRouter, passport);
-var apiAuthenticationRoute = require('./routes/apiAuthentication')(backEndRouter, passport, authorize);
+var apiAuthenticationRoute = require('./routes/apiAuthentication')(backEndRouter, passport, authorize, authenticate);
 var roleRoutes = require('./routes/role')(backEndRouter, Role, authorize);
-var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize, passport);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize, passport, geometry);
+var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize, authenticate);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize, authenticate);
                                           
 //load in routes
 app.use('/api', backEndRouter);
