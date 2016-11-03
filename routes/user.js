@@ -69,6 +69,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 console.log("user found")
                 console.log("new email: "+ req.body.email)
                 console.log("new password: "+ req.body.password)
+                console.log("body: " req.body)
                 if (req.body.email) {
                     user.local.email = req.body.email;
                 };
