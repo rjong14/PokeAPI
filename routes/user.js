@@ -62,9 +62,13 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 });
         })
         .put(authorize.isAdminOrOwnRoute, function (req, res) {
+        console.log("In put")
             var us = null;
             User.findById(req.params.id, function (err, user) {
                 if (err) { res[500](err); return;}
+                console.log("user found")
+                console.log("new email: "+ req.body.email)
+                console.log("new password: "+ req.body.password)
                 if (req.body.email) {
                     user.local.email = req.body.email;
                 };
