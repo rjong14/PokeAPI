@@ -3,6 +3,7 @@ var http = require('http');
 module.exports = function (backEndRouter, User, Role, Location, async, authorize, authenticate) {
     backEndRouter.route('/users')
         .get(authorize.isAdmin, function (req, res) {
+        console.log("in the get");
         var page = 1;
         if (req.query.page > 0){
             page = req.query.page;
@@ -15,6 +16,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             .limit(10)
             .exec(function (err, user) {
             if (err) {
+                console.log("err");
                 res[500](err);
                 return;
             }
@@ -23,6 +25,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 console.log(androidresp);
                 res.json(androidresp);
             }else {
+                console.log("not android");
                 res[200](user, 'ok');
             }
 
