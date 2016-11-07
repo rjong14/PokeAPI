@@ -19,7 +19,8 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 return;
             }
             if(req.headers['isandroid']){
-                res.json(user);
+                var androidresp = {users: user};
+                res.json(androidresp);
             }else {
                 res[200](user, 'ok');
             }
