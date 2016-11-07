@@ -25,6 +25,7 @@ module.exports = function (passport, User, Role) {
         User.findById(jwt_payload.id)
             .populate('role')
             .exec(function (err, user) {
+            console.log("auth pass two");
                 if (err) {
                     done(err, false);
                 }
@@ -42,6 +43,7 @@ module.exports = function (passport, User, Role) {
             passReqToCallback: true
         },
         function (req, email, password, done) {
+        console.log("auth pass one");
             if (req.session.passport.user !== undefined) {
                 return done(null, user);
             } else {
