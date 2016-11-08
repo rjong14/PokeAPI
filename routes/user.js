@@ -54,7 +54,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         });
 
     backEndRouter.route('/users/:id')
-        .get(authorize.isAdminOrOwnRoute, function (req, res) {
+        .get(authenticate.duoAuth, authorize.isAdminOrOwnRoute, function (req, res) {
             User.findById(req.params.id)
                 .populate('role')
                 .exec(function (err, user) {
