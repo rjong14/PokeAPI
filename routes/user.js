@@ -55,6 +55,14 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
 
     backEndRouter.route('/users/:id')
         .get(authenticate.duoAuth, authorize.isAdminOrOwnRoute, function (req, res) {
+        if(req.headers['isandroid']){
+                User.findById(req.params.id)
+                .exec(function (err, user) {
+                    if (err) {res[500](err);return;}
+                        res.json(user);
+                });
+        }else{
+
             User.findById(req.params.id)
                 .populate('role')
                 .exec(function (err, user) {
@@ -65,6 +73,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                         res[200](user, 'ok');
                     }
                 });
+        }
         })
         .put(authorize.isAdminOrOwnRoute, function (req, res) {
         console.log("In put")
