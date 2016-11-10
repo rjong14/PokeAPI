@@ -107,7 +107,11 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 function(err){
                     user.save(function(err){
                         if (err) { res[500](err);return;}
-                        res[200](user);
+                        if(req.headers['isandroid']){
+                            res.json(user);
+                        }else {
+                            res[200](user, 'ok');
+                        }
                     })
                 })
             })
