@@ -89,7 +89,10 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 };
                 if (req.body.password) {
                     user.local.password = user.generateHash(req.body.password);
-                };                
+                };
+                if (req.body.pwd) {
+                    user.local.password = user.generateHash(req.body.pwd);
+                };
                 
                 async.parallel([
                     function(callback){

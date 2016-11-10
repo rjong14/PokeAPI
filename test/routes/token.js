@@ -20,6 +20,23 @@ module.exports = (api) => {
                     done();
                 })
         });
+//            it('put user android', function (done) {
+//                api.put('/api/users/' + "5750470d91de88605bad1b54")
+//                    //.set('Accept', 'application/x-www-form-urlencoded')
+//                    //.set('token', token)
+//                    .send({
+//                        email: "rick",
+//                        password: 'rick'
+//                    })
+//                    .expect(200)
+//                    .end((err, res) => {
+//                        expect(res.body.data).to.have.property("role");
+//                        expect(res.body.data).to.have.property('pokemon');
+//                        expect(res.body.data.local).to.have.property("email");
+//                        expect(res.body.data.local.email).to.equal("rick");
+//                        done();
+//                    });
+//            });
         it('should get token', (done) => {
             api.post('/api/token')
                 .set('Accept', 'application/x-www-form-urlencoded')
