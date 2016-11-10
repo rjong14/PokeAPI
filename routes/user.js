@@ -75,7 +75,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 });
         }
         })
-        .put(authorize.isAdminOrOwnRoute, function (req, res) {
+        .put(authenticate.duoAuth, authorize.isAdminOrOwnRoute, function (req, res) {
         console.log("In put")
             var us = null;
             User.findById(req.params.id, function (err, user) {
