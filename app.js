@@ -18,7 +18,7 @@ require('json-response');
 var authorize = require('./modules/authorize');
 var authenticate = require('./modules/authenticate');
 var geometry = require('./modules/geometry');
-
+var pinklog = require('./modules/pinklog');
 
 //make app and router
 var backEndRouter = express.Router();
@@ -31,6 +31,8 @@ app.io = require('socket.io')();
 var Role = require('./models/Role');
 var User = require('./models/User');
 var Location = require('./models/Location');
+
+process.env.VERBOSE = 'true';
 
 //configuration
 mongoose.connect(configDB.url);
@@ -70,7 +72,7 @@ var authenticationRoute = require('./routes/authentication')(frontEndRouter, pas
 var apiAuthenticationRoute = require('./routes/apiAuthentication')(backEndRouter, passport, authorize, authenticate);
 var roleRoutes = require('./routes/role')(backEndRouter, Role, authorize);
 var locationRoutes = require('./routes/location')(backEndRouter, Location, authorize, authenticate);
-var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize, authenticate);
+var userRoutes = require('./routes/user')(backEndRouter, User, Role, Location, async, authorize, authenticate, pinklog);
                                           
 //load in routes
 app.use('/api', backEndRouter);

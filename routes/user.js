@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function (backEndRouter, User, Role, Location, async, authorize, authenticate) {
+module.exports = function (backEndRouter, User, Role, Location, async, authorize, authenticate, pinklog) {
     backEndRouter.route('/users')
         .get(authenticate.duoAuth, authorize.isAdmin, function (req, res) {
         console.log("in the get");
@@ -16,7 +16,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
             .limit(10)
             .exec(function (err, user) {
             if (err) {
-                console.log("err");
+                pinklog.error("err");
                 res[500](err);
                 return;
             }
@@ -25,7 +25,7 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
                 console.log(androidresp);
                 res.json(androidresp);
             }else {
-                console.log("not android");
+                pinklog.log("not android");
                 res[200](user, 'ok');
             }
 
@@ -76,14 +76,14 @@ module.exports = function (backEndRouter, User, Role, Location, async, authorize
         }
         })
         .put(authenticate.duoAuth, authorize.isAdminOrOwnRoute, function (req, res) {
-        console.log("In put")
+        pinklog.log("In put")
             var us = null;
             User.findById(req.params.id, function (err, user) {
                 if (err) { res[500](err); return;}
-                console.log("user found")
-                console.log("new email: "+ req.body.email)
-                console.log("new password: "+ req.body.password)
-                console.log("body: " + req.body)
+                pinklog.log("user found")
+                pinklog.log("new email: "+ req.body.email)
+                pinklog.log("new password: "+ req.body.password)
+                pinklog.log("body: " + req.body)
                 if (req.body.email) {
                     user.local.email = req.body.email;
                 };
