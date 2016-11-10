@@ -3,7 +3,7 @@ var http = require('http');
 module.exports = function (backEndRouter, User, Role, Location, async, authorize, authenticate, pinklog) {
     backEndRouter.route('/users')
         .get(authenticate.duoAuth, authorize.isAdmin, function (req, res) {
-        console.log("in the get");
+        pinklog.log("in the get");
         var page = 1;
         if (req.query.page > 0){
             page = req.query.page;
