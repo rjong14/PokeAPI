@@ -617,6 +617,7 @@ a.bg-danger:hover {
     color: #FFF !important;
     padding: 0;
     display: none;
+    top: -20px;
 }
 
 .sidebar ul li a {

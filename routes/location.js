@@ -3,7 +3,7 @@ module.exports = function(backEndRouter, Location, authorize, authenticate){
     .get(authenticate.duoAuth,authorize.isAdmin, function(req,res){
         Location.find(function(err, locations){
             if (err){res[500](err);return;}
-            res[200](locations);
+            res[200](locations, 'ok');
         })
     })
     .post(authorize.isAdmin, function(req, res){
@@ -16,7 +16,7 @@ module.exports = function(backEndRouter, Location, authorize, authenticate){
         location.pokeid = req.body.pokeid;
         location.save(function(err){
             if (err){ res[500](err); return; }
-            res[200](location);
+            res[200](location, 'ok');
         })
     });
     
@@ -24,7 +24,7 @@ module.exports = function(backEndRouter, Location, authorize, authenticate){
     .get(authenticate.duoAuth, authorize.isAdmin, function(req, res){
         Location.findById(req.params.locationId, function(err, location){
             if(err){res[500](err);return;}
-            res[200](location)
+            res[200](location, 'ok')
         })
     })
     
@@ -36,7 +36,7 @@ module.exports = function(backEndRouter, Location, authorize, authenticate){
             if(req.body.pokeid){location.pokeid = req.body.pokeid};
             location.save(function(err){
                 if(err){res[500](err);return;}
-                res[200](location);
+                res[200](location, 'ok');
             })
         }
     )})

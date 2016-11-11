@@ -64,38 +64,7 @@ isAdminOrOwnRoute(req, res, next){
     }
     else{
         res[401]('', 'not logged in');
-    }    
-},
-isUserGiveToken(req, res, next){
-        console.log('token is black');
-        console.log(req.body);
-            if (req.isAuthenticated()) {
-                console.log('great success');
-                var email = req.body.email;
-                var password = req.body.password;
-                console.log(req);
-                res[200];
-
-
-
-//                var user = User.find(function (u) {
-//                    return u.email === email && u.password === password;
-//                });
-//                if (user) {
-//                    console.log(user);
-//                    var payload = {
-//                        id: user.id
-//                    };
-//                    var token = jwt.encode(payload, jwtconfig.jwtSecret);
-//                    res.json({
-//                        token: token
-//                    });
-//                } else {
-//                    res[401];
-//                }
-            } else {
-                res[401];
-            }
+    }
 }
 }
 

@@ -19,6 +19,7 @@ var authorize = require('./modules/authorize');
 var authenticate = require('./modules/authenticate');
 var geometry = require('./modules/geometry');
 var pinklog = require('./modules/pinklog');
+var assert = require('assert');
 
 //make app and router
 var backEndRouter = express.Router();
@@ -32,9 +33,11 @@ var Role = require('./models/Role');
 var User = require('./models/User');
 var Location = require('./models/Location');
 
-process.env.VERBOSE = 'true';
+process.env.VERBOSE = 'false';
 
 //configuration
+mongoose.Promise = global.Promise;
+//assert.equal(query.exec().constructor, global.Promise);
 mongoose.connect(configDB.url);
 require('./config/passport')(passport, User, Role);
 
@@ -80,9 +83,7 @@ app.use('/', frontEndRouter);
 
 //Middleware
 backEndRouter.get('/', function (req, res) {
-    res.json({
-        message: 'hooray! welcome to our api!!'
-    });
+    res[200](null, 'hooray! welcome to our api!!');
 });
 
 // catch 404 and forward to error handler

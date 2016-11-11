@@ -12,21 +12,21 @@ block content
           span.input-group-addon http://localhost:3000/api/
           input#interactive.form-control(type='text', placeholder='')
           span.input-group-btn
-            button.btn.btn-primary(onclick='interactive_call();return false;') request
+            button.btn.btn-primary(onclick='tri.interactive_call();return false;') request
         small
           | Need a hint? try
-          a(href='#', onclick="update('users/');return false;")
+          a(href='#', onclick="tri.update('users/');return false;")
             i users/
           |  or
-          a(href='#', onclick="update('locations/');return false;")
+          a(href='#', onclick="tri.update('locations/');return false;")
             i locations/
           |  or
-          a(href='#', onclick="update('somethingcool');return false;")
-            i somethingcool
+          a(href='#', onclick="tri.update('roles/');return false;")
+            i roles/
         p.lead.pad_top Result:
         .well
           pre.pre-scrollable
-            code#interactive_output.json.
+            code#interactive_output.json.hljs
 
         .col-sm-2.col-lg-2.col-md-2
     .panel.panel-poke
@@ -34,8 +34,6 @@ block content
         | API Documentation
       .panel-body
         h4 Users
-        p
-          | users bla bla bla
         h5 GET api/users/
         pre
           code.json.
@@ -43,25 +41,16 @@ block content
                 "status": 200,
                 "data": [
                     {
-                        "role": "56eaad7d0e8cf1f63c36117d",
-                        "_id": "56eaae200e8cf1f63c361180",
+                        "role": "{{role.id}}",
+                        "_id": "{{user.id}}",
                         "__v": 0,
                         "local": {
-                            "password": "$2a$08$RRFRVjYiMKjrL3oU/R3SCeSXU89kSb1r3F3hr3G9QnH.m8tsZpgpe",
-                            "email": "chris@poole.chan"
-                        }
-                    },
-                    {
-                        "role": "56eaad7d0e8cf1f63c36117d",
-                        "_id": "56ec0ad8303f42090be4722e",
-                        "__v": 0,
-                        "local": {
-                            "password": "$2a$08$DVp/QyEQeuQVaLua6PJKLejXAeWufJpG87oHJXFe5nj9WN/8nhgkm",
-                            "email": "chris2@poole.chan"
+                            "password": "{{hashed password}}",
+                            "email": "{{local.email}}"
                         }
                     }
                 ],
-                "message": null
+                "message": "ok"
             }
         h5 GET api/users/{ID}
         pre
@@ -70,23 +59,21 @@ block content
                 "status": 200,
                 "data": {
                     "role": {
-                        "name": "moot",
-                        "_id": "56eaad7d0e8cf1f63c36117d",
+                        "name": "{{role.name}}",
+                        "_id": "{{role.id}}",
                         "__v": 0
                     },
-                    "_id": "56eaae200e8cf1f63c361180",
+                    "_id": "{{user.id}}",
                     "__v": 0,
                     "local": {
-                        "password": "$2a$08$RRFRVjYiMKjrL3oU/R3SCeSXU89kSb1r3F3hr3G9QnH.m8tsZpgpe",
-                        "email": "chris@poole.chan"
+                        "password": "{{hashed password}}",
+                        "email": "{{local.email}}"
                     }
                 },
-                "message": null
+                "message": "ok"
             }
         h4
           | Locations
-        p
-          | Locations bla bla
         h5 GET api/locations/
         pre
           code.
@@ -94,25 +81,16 @@ block content
                 "status": 200,
                 "data": [
                     {
-                        "_id": "57fbae52d2ba5b77463529e4",
+                        "_id": "{{location.id}}",
                         "pokeid": 25,
                         "__v": 0,
                         "latlng": {
-                            "lat": 51.69145,
-                            "lng": 5.29291
-                        }
-                    },
-                    {
-                        "_id": "57fbaf37d2ba5b77463529e5",
-                        "pokeid": 150,
-                        "__v": 0,
-                        "latlng": {
-                            "lat": 51.688717,
-                            "lng": 5.287348
+                            "lat": {{lat}},
+                            "lng": {{lng}}
                         }
                     }
                 ],
-                "message": null
+                "message": "ok"
             }
 
     script.

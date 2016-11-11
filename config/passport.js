@@ -13,6 +13,7 @@ var opts = {
     secretOrKey: jwtconfig.jwtSecret,
     passReqToCallback: true
 };
+var pinklog = require('../modules/pinklog');
 
 // load the auth variables
 var configAuth = require('./auth');
@@ -20,15 +21,12 @@ var configAuth = require('./auth');
 // expose this function to our app using module.exports
 module.exports = function (passport, User, Role) {
 
-
     passport.use('jwt-auth', new JwtStrategy(opts, function (req, jwt_payload, done) {
         User.findById(jwt_payload.id)
             .populate('role')
             .exec(function (err, user) {
-            console.log("auth pass two");
-                if (err) {
-                    done(err, false);
-                }
+            pinklog.log("auth pass two");
+                if (err) {done(err, false);}
                 req.isAuthenticated = function () {
                     return true
                 };
@@ -43,13 +41,10 @@ module.exports = function (passport, User, Role) {
             passReqToCallback: true
         },
         function (req, email, password, done) {
-        console.log("auth pass one");
+        pinklog.log("auth pass one");
             if (req.session.passport.user !== undefined) {
                 return done(null, user);
-            } else {
-                done(err, false);
-            }
-
+            } else {done(err, false);}
         }));
 
     passport.use('jwt-login', new LocalStrategy({
@@ -61,23 +56,12 @@ module.exports = function (passport, User, Role) {
             User.findOne({
                 'local.email': email
             }, function (err, user) {
-                if (err) {
-                    return done(err);
-                }
-                if (!user) {
-                    return done(null, false, req.flash('loginMessage', 'No user found.'));
-                }
-                if (!user.validPassword(password)) {
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-                }
-                var payload = {
-                    id: user.id
-                };
+                if (err) {return done(err);}
+                if (!user) {return done(null, false, req.flash('loginMessage', 'No user found.'));}
+                if (!user.validPassword(password)) {return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));}
+                var payload = {id: user.id};
                 var token = jwt.encode(payload, jwtconfig.jwtSecret);
-                req.token = {
-                    token: token,
-                    user: user
-                };
+                req.token = {token: token, user: user};
                 return done(null, user);
             });
         }));
@@ -139,7 +123,7 @@ module.exports = function (passport, User, Role) {
         passReqToCallback : true
     },
     function(req, email, password, done) {
-        console.log("login attempted with email: "+email+" password: "+password)
+        pinklog.log("login attempted with email: "+email+" password: "+password)
         User.findOne({ 'local.email' :  email }, function(err, user) {
             if (err) { return done(err); }
             if (!user) { return done(null, false, req.flash('loginMessage', 'No user found.')); }
@@ -201,12 +185,9 @@ module.exports = function (passport, User, Role) {
                 User.findOne({
                     'google.id': profile.id
                 }, function (err, user) {
-                    if (err) {
-                        return done(err);
-                    }
-                    if (user) {
-                        return done(null, user);
-                    } else {
+                    if (err) {return done(err);}
+                    if (user) {return done(null, user);}
+                    else {
                         var newUser = new User();
                         newUser.google.id = profile.id;
                         newUser.google.token = token;

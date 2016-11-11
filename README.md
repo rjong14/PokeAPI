@@ -1,6 +1,7 @@
 # PokeAPI
 
-[![](https://img.shields.io/badge/Heroku-apipoke-79589f.svg)](https://apipoke.herokuapp.com/)
+[![](https://img.shields.io/badge/Heroku-apipoke-79589f.svg)](https://apipoke.herokuapp.com/) [![](https://img.shields.io/badge/rick-approved-ff69b4.svg)](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+[![](https://img.shields.io/badge/Test-passing-45db18.svg)]()
 
 -- documents
 
@@ -23,7 +24,6 @@ role
 
 todo:
 - collectie filteren
-- testen
 - documentatie
 - externe validatie???
 
