@@ -72,6 +72,22 @@ block content
                 },
                 "message": "ok"
             }
+
+        h5 GET api/users/{ID}/pokemon
+        pre
+          code.
+            {
+                "status": 200,
+                "data": [
+                    {
+                        "name": "{{pokemon.name}}",
+                        "pokeid": "{{pokemon.pokeid}}",
+                        "caught_at": "Date.now()",
+                        "_id": "{{pokemon.id}}"
+                    }
+                ],
+                "message": "ok"
+            }
         h4
           | Locations
         h5 GET api/locations/
