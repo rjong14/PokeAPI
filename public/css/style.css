@@ -990,3 +990,7 @@ a.todo-list-item:focus {
 .fixed-table-pagination .pagination-detail {
     margin-top: 20px;
 }
+
+.spacer {
+    margin-right: 10px;
+}
