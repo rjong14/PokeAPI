@@ -24,7 +24,12 @@ module.exports = function (backEndRouter, passport, authorize, authenticate) {
         });
 
     backEndRouter.get('/profile', authenticate.duoAuth, function (req, res) {
-        res[200](req.user);
+        if(req.user){
+            res[200](req.user);
+        }else{
+            res[400](null, "no good");
+        }
+
     });
 
 
