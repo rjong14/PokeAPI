@@ -23,7 +23,7 @@ module.exports = function (backEndRouter, passport, authorize, authenticate) {
             res.redirect('/api/profile');
         });
 
-    backEndRouter.get('/profile', authorize.isAdminOrOwnRoute, function (req, res) {
+    backEndRouter.get('/profile', authenticate.duoAuth, function (req, res) {
         res[200](req.user);
     });
 
