@@ -9,6 +9,6 @@ module.exports = {
     'googleAuth' : {
         'clientID'      : '171265629189-m2i25o3tm3a1f9sej4erotr49g9v07jo.apps.googleusercontent.com',
         'clientSecret'  : '-u-7_nyPU52Rkshr0nhguZt4',
-        'callbackURL'   : 'http://pokeapi9001.herokuapp.com/auth/google/callback'
+        'callbackURL'   : 'https://pokeapi9001.herokuapp.com/auth/google/callback'
     }
 };
