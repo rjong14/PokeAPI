@@ -57,8 +57,8 @@ module.exports = function (passport, User, Role) {
                 'local.email': email
             }, function (err, user) {
                 if (err) {return done(err);}
-                if (!user) {return done(null, false, req.flash('loginMessage', 'No user found.'));}
-                if (!user.validPassword(password)) {return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));}
+                if (!user) {return done(null, false);}
+                if (!user.validPassword(password)) {return done(null, false);}
                 var payload = {id: user.id};
                 var token = jwt.encode(payload, jwtconfig.jwtSecret);
                 req.token = {token: token, user: user};
