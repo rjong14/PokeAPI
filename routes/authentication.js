@@ -26,7 +26,7 @@ module.exports = function(frontEndRouter, passport){
     frontEndRouter.route('/auth/facebook/callback')
     // handle the callback after facebook has authenticated the user
     .get(passport.authenticate('facebook', {
-        successRedirect : '/profile',
+        successRedirect : '/api/profile',
         failureRedirect : '/login',
         scope:['email']
     }));
@@ -38,7 +38,7 @@ module.exports = function(frontEndRouter, passport){
     
     frontEndRouter.route('/auth/google/callback')
     .get(passport.authenticate('google', {
-        successRedirect : '/profile',
+        successRedirect : '/api/profile',
         failureRedirect : '/login'
     }));
     
