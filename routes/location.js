@@ -11,8 +11,8 @@ module.exports = function(backEndRouter, Location, authorize, authenticate){
         if(!req.body.lat){res[500]('no lat given');return;};
         if(!req.body.lng){res[500]('no lng given');return;};
         if(!req.body.pokeid){res[500]('no pokeid given');return;};
-        location.latlng.lat = req.body.lat;
         location.latlng.lng = req.body.lng;
+        location.latlng.lat = req.body.lat;
         location.pokeid = req.body.pokeid;
         location.save(function(err){
             if (err){ res[500](err); return; }
